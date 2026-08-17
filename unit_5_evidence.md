@@ -1,6 +1,6 @@
 # part 3
 
-```mermaid
+```nyiko
 flowchart TD
     A[Learner signs in] --> B[Client-side: JS sends login request]
     B --> C[Firebase Authentication]
