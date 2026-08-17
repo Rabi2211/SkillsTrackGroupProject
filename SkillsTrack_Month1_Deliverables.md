@@ -1,4 +1,4 @@
-# Firebase data model and Rest endpoint plan planning
+# Firebase data model and REST endpoint plan
 
 ## 1. User registration, sign-in, sign-out, authenticated state
 
@@ -88,3 +88,172 @@
 8. Booking form (feature 4) — independent of tasks, can be built in parallel by a second team member.
 9. Animation + multimedia (feature 8) — polish pass once dashboard and a resources view exist.
 10. Mini-game (feature 9) — self-contained, good candidate for the third team member to own independently.
+
+## REST endpoint plan
+
+Each required feature (brief, section 2.3), paired with its exact REST endpoint(s) and the steps to build it. Base URL for all endpoints: `https://<project-id>-default-rtdb.<region>.firebasedatabase.app/`, every request appends `?auth=<ID_TOKEN>`.
+
+---
+
+## 1. User registration, sign-in, sign-out, authenticated state (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- Registration/sign-in/sign-out use the **Firebase Authentication SDK**, not the Realtime Database REST API directly.
+- POST `/users/<uid>.json` — write the profile record once, right after registration.
+- GET `/users/<uid>.json` — read profile/role after sign-in, to drive role-based UI (learner vs assessor).
+
+**Steps:**
+
+1. Enable Email/Password sign-in in Firebase console.
+2. Build register form → `createUserWithEmailAndPassword` → on success, POST profile to `/users/<uid>.json` with `role: "learner"`.
+3. Build sign-in form → `signInWithEmailAndPassword` → GET `/users/<uid>.json` to confirm role.
+4. Add `onAuthStateChanged` listener to restore session on load (see `Flowcharts.md`, login flow).
+5. Add sign-out → `signOut()` → clear session → redirect to landing page.
+6. Guard protected routes/views against unauthenticated access.
+
+---
+
+## 2. Dashboard: totals, completed, outstanding, progress (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- GET `/tasks.json?orderBy="userId"&equalTo="<uid>"` — the only endpoint this feature needs; everything else is calculated client-side.
+
+**Steps:**
+
+1. On dashboard load, GET the filtered task list.
+2. Pass results into `new TaskManager(tasks)` (see `Class-Design.md`).
+3. Call `getTotals()` → total, completed, outstanding, progress %.
+4. Render into the DOM; re-run after any task create/update/delete.
+5. Matches the calculation flow in `Flowcharts.md`, section 3.
+
+---
+
+## 3. Task manager: create, read, update, delete (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+**Steps:**
+
+1. Read: GET on load, render list.
+2. Create: form → client-side validation → POST → refresh list + dashboard totals.
+3. Update: edit form pre-filled from a `Task` instance → PATCH.
+4. Delete: trigger confirmation dialog (feature 7) → on confirm only → DELETE.
+5. After every write, re-instantiate/refresh `TaskManager` so totals stay accurate.
+
+---
+
+## 4. Support-session booking form with validation and status feedback (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+**Steps:**
+
+1. Build form: topic, preferred date, notes.
+2. Client-side validation (required fields, no past dates) → block submit until valid, show inline errors.
+3. On valid submit, POST with `status: "pending"`.
+4. GET the booking back to show live status (pending/confirmed/declined) as feedback.
+5. If in scope, build an assessor view that PATCHes only `status` — rules already restrict this server-side.
+
+---
+
+## 5. Search, filter or sort (arrays and higher-order functions) (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- None — operates entirely on the array already fetched via feature 3's GET request. No extra network calls.
+
+**Steps:**
+
+1. Search: `tasks.filter(t => t.title.toLowerCase().includes(query))`.
+2. Filter: `TaskManager.filterByCategory()`.
+3. Sort: `TaskManager.sortByDueDate()`.
+4. Wire search input / category dropdown / sort control to re-render the list.
+5. Persist last-used filter via cookie (feature 6).
+
+---
+
+## 6. Cookie-based preference (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- None — cookies are entirely client-side (`document.cookie`), no Firebase involvement. This is also why passwords/tokens must never go here — they belong to the Auth SDK/session, not this mechanism.
+
+**Steps:**
+
+1. Choose preferences to store: theme + last filter.
+2. Write `setCookie`/`getCookie` helpers.
+3. Save on change (theme toggle, filter select).
+4. Read on app load, before first render.
+5. Confirm no sensitive data ever reaches a cookie.
+
+---
+
+## 7. Confirmation dialog, redirect, printable summary (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- Confirmation dialog triggers the DELETE call from feature 3 — no separate endpoint of its own.
+- Redirect and print summary use no new endpoints; print summary reads from the already-fetched task list via `TaskManager.getTotals()`.
+
+**Steps:**
+
+1. Dialog: reusable `<dialog>` component, wired to task deletion.
+2. Redirect: after sign-in → dashboard; after sign-out → landing page.
+3. Print summary: `@media print` stylesheet + `window.print()`, driven by the same totals as the dashboard.
+
+---
+
+## 8. JS-timer animation and controlled multimedia element (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- None — purely front-end behaviour.
+
+**Steps:**
+
+1. Animate the dashboard progress bar with `requestAnimationFrame`/`setInterval` when totals update.
+2. Add a `<video>` or `<audio>` element (e.g. resources view).
+3. Add custom JS-controlled play/pause buttons via event listeners.
+
+---
+
+## 9. Mini-game (REST endpoint plan)
+
+**REST/Firebase calls:**
+
+- POST `/scores.json` — the only endpoint this feature needs, fired once on game completion.
+
+**Steps:**
+
+1. Confirm framework choice (Phaser.js, Kaboom.js, etc.) with the assessor.
+2. Build a small, clearly "basic operable" game.
+3. On completion, POST `{ userId, score, duration, completedAt }` to `/scores.json`.
+4. Optionally surface results on the dashboard.
+
+---
+
+## 10. Firebase Realtime Database integration and documented REST CRUD (checklist)
+
+This isn't a separate build task — it's the checklist that ties every table above together:
+
+- [ ] Every CRUD action above matches a row in this document (method + path + purpose).
+- [ ] `database.rules.json` is deployed and matches every access pattern used above.
+- [ ] No endpoint is called without an `auth` token once rules are locked down.
+- [ ] Each PATCH sends only the fields intended to change (never a full-record overwrite).
+
+---
+
+## Suggested build order (final plan)
+
+1. Auth (feature 1) — required before any other endpoint can be called with a valid token.
+2. Deploy `database.rules.json` (feature 10) — lock down access before writing real data.
+3. Task manager CRUD (feature 3) — core data loop other features depend on.
+4. Dashboard totals (feature 2) — depends on task data existing.
+5. Search/filter/sort (feature 5) — layers on the fetched task list, no new endpoints.
+6. Cookie preferences (feature 6) — independent, can run in parallel.
+7. Confirmation dialog, redirect, print summary (feature 7) — depends on 2 and 3 being functional.
+8. Booking form (feature 4) — independent data path, good for parallel ownership.
+9. Animation + multimedia (feature 8) — polish pass.
+10. Mini-game (feature 9) — self-contained, single new endpoint, good for independent ownership.
