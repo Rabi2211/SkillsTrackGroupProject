@@ -259,132 +259,113 @@ This isn't a separate build task — it's the checklist that ties every table ab
 10. Mini-game (feature 9) — self-contained, single new endpoint, good for independent ownership.
 # Pseudocode for login, task creation, progress calculation and deletion confirmation
 1. Registration
-START.
-  Input:
+START.Registration 
+INPUT email
+INPUT password
 
-      Email address
-      Password
 
-  Process:
+IF (NOT email CONTAINS ".") OR
+   (NOT email CONTAINS "@" ) OR
+   (NOT email CONTAINS "gmail.com")
+   DISPLAY "Incorrect email"
+ENDIF
 
-     User enters email address and password.
-     Check that the password contains at least one special character.
+IF (LENGTH(password) < 8) OR
+   (NOT password CONTAINS special_character) OR
+   (NOT password CONTAINS upprcase _letter) THEN
+   DISPLAY "please enter correct password"
+ENDIF
 
-     IF password does not contains at least one special character 
-          THEN validation fails 
-          DISPLAY an error.
-     IF password contains at least one special character AND email           
-          THEN send the registration request to Firebase Authentication.
-          DISPLAY a check your mail for verification message
+IF (email_is_invalid) OR (password_is_invalid) THEN
+    DISPLAY "Registration failed.Please try again"
+    RETURN TO REGISTRATION_PAGE
+ELSE 
+    DISPLAY "Registration seccessful"
+    PROCEED TO BACKEND
+ENDIF
 
-     Firebase creates the user account and securely handles the password.
-     If successful, the user is registered.
- 
-  Output:
-
-     IF Registration successful 
-         THEN go to login/dashboard.
-     IF Registration failed 
-         THEN 
-         DISPLAY an error message
-END.
+END RegistrationValidation
 
 2. Login
 START.
-  Input:
+  INPUT email_address
+  INPUT password
 
-     Email address
-     Password
+  PROCESS
+  user enters their email and password
+  send the login request to Firebase Authentication with email_address and pass
 
-  Process:
+IF the credentials are valid THEN 
+   Firebase authenticates the user and returns an authentication token
+   DISPLAY dashboard
+ELSE IF the credentials are valid THEN
+    Firebase returns an error
+    DISPLAY login error
+ENDIF
 
-User enters their email and password.
-Send the login request to Firebase Authentication.
-Firebase checks the credentials against the registered account.
-     If the credentials are valid 
-         THEN
-         Firebase authenticates the user and returns an authentication state/token.
-     If the credentials are invalid 
-         THEN 
-         Firebase returns an error.
-
-  Output:
-
-     DISPLAY  dashboard.
-     login error.
-END.
-
+END
 3. Task Creation — CRUD: Create
 START.
-  Input
-     Task title
-     Task description
-     Due date
-     Other task information
+  INPUT taskTitle
+  INPUT taskDescription
+  INPUT dueDate
+  INPUT otherTaskInformation
 
-   Process
-
-      Lecturer enters the task information.
-      Validate the required fields.
-      Send the task data to Firebase Firestore.
-      Firestore creates a new task document.
-      Associate the task with the relevant student/class/lecturer.
-
-   Output
-
-     IF Task successfully created THEN 
-         DISPLAY the new task.
-     IF Creation fails  
-         DISPLAY an error message.
+  PROCESS
+    Lecturer enters the task information
+    Validate required fields (task_title, due_date, etc.)
+    IF validation passes THEN
+       Send task data to Firebase Firestore to create a new task document
+       Associate task with relevant student/class/lecturer
+       IF Firestore confirms task creation THEN
+          DISPLAY the new task
+       ELSE
+          DISPLAY error message (task creation failed)
+       ENDIF
+    ELSE
+       DISPLAY error message (validation failed)
+    ENDIF
+END
 
 4. Progress Calculation — CRUD: Read 
-  START.
-      Input
-         Student task data
-         Completed tasks
-         Total tasks
+ START
+  INPUT student_id
 
-      Process
+  PROCESS
+    Request student's task data from Firebase Firestore using student_id
+    Read completion status for each task
+    Count number_of_completed_tasks
+    Count total_number_of_tasks
+    Calculate progress_percentage = (number_of_completed_tasks / total_number_of_tasks) * 100
 
-         Request the student's task data from Firebase Firestore.
-         Read the task completion status.
-         Count completed tasks.
-         Count total assigned tasks.
-         Calculate the progress percentage.
+  OUTPUT
+    DISPLAY progress_percentage
+    DISPLAY number_of_completed_tasks
+    DISPLAY (total_number_of_tasks - number_of_completed_tasks) as remaining_tasks
+END
 
-
-      Output
-
-           DISPLAY the student's progress percentage.
-           DISPLAY completed and remaining tasks.
-  END.
 5. Task Deletion — CRUD: Delete
-START.
+START
+  INPUT selected_task
+  INPUT delete_request
 
-     Input
-         Task selected by lecturer
-         Delete request
+PROCESS
 
-     Process
-
-         IF Lecturer selects a task 
-             THEN
-             DISPLAY  deletion confirmation.
-         IF Lecturer confirms deletion 
-             THEN
-             Send the delete request to Firebase Firestore.
-             Firestore deletes the selected task document.
-             Refresh the task list.
-
-     Output
-
-          IF Confirmed 
-             THEN task deleted successfully.
-          IF Cancelled 
-             THEN task remains unchanged.
-          IF Deletion fails 
-             THEN display an error.
-END.
+IF lecturer selects a task THEN
+   DISPLAY deletion confirmation message
+IF lecturer confirms deletion THEN
+    Send delete request to Firebase Firestore for selected_task
+IF Firestore deletes task successfully THEN
+    Refresh task list
+    DISPLAY "Task deleted successfully" 
+ELSE
+   DISPLAY error message (deletion failed)
+ENDIF   
+   ELSE
+    DISPLAY "Task remains unchanged"
+ENDIF
+    
+END
 # User Stories
 
 ## User Story 1: Register Account
@@ -401,7 +382,6 @@ END.
 4. On successful registration:
    - The user is created in Firebase Authentication
    - The user is added to the `users` node in the Realtime Database
-5. After registration, the user is redirected to the dashboard.
 
 ---
 
@@ -417,8 +397,6 @@ END.
 3. On successful login:
    - The authenticated state is set
    - The user is redirected to the dashboard
-4. The **Remember Me** option stores the **theme preference** in a cookie, not the password.
-
 ---
 
 ## User Story 3: Add, View, and Delete Tasks
