@@ -32,6 +32,14 @@ Reports, Support).
 /reports/{reportId}
 /gameScores/{scoreId}
 ```
+// LOGIN (POST /auth/login) — "login to administration portal" screen
+function login(username, password, assessorId = null):
+    { idToken, uid } = firebaseAuth.signInWithEmailAndPassword(username, password)
+    user = db.collection("users").doc(uid).get()
+    if user.role == "admin":
+        assert assessorId != null && assessorId == user.assessorId
+        // mismatched/omitted assessorId on an admin login is rejected here
+    return { idToken, uid, role: user.role, assessorId: user.assessorId }
 
 ### `/users/{uid}`
 | Field | Type | Notes |
