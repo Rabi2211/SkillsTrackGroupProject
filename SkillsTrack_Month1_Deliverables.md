@@ -257,61 +257,65 @@ This isn't a separate build task — it's the checklist that ties every table ab
 8. Booking form (feature 4) — independent data path, good for parallel ownership.
 9. Animation + multimedia (feature 8) — polish pass.
 10. Mini-game (feature 9) — self-contained, single new endpoint, good for independent ownership.
+
+
 # Pseudocode for login, task creation, progress calculation and deletion confirmation
 1. Registration
-START.Registration 
-INPUT email
-INPUT password
+
+   START.Registration 
+
+     INPUT email
+     INPUT password
 
 
-IF (NOT email CONTAINS ".") OR
-   (NOT email CONTAINS "@" ) OR
-   (NOT email CONTAINS "gmail.com")
-   DISPLAY "Incorrect email"
-ENDIF
+       IF (NOT email CONTAINS ".") OR
+          (NOT email CONTAINS "@" ) OR
+          (NOT email CONTAINS "gmail.com")
+          DISPLAY "Incorrect email"
+       ENDIF
 
-IF (LENGTH(password) < 8) OR
-   (NOT password CONTAINS special_character) OR
-   (NOT password CONTAINS upprcase _letter) THEN
-   DISPLAY "please enter correct password"
-ENDIF
+       IF (LENGTH(password) < 8) OR
+          (NOT password CONTAINS special_character) OR
+          (NOT password CONTAINS upprcase _letter) THEN
+          DISPLAY "please enter correct password"
+       ENDIF
 
-IF (email_is_invalid) OR (password_is_invalid) THEN
-    DISPLAY "Registration failed.Please try again"
-    RETURN TO REGISTRATION_PAGE
-ELSE 
-    DISPLAY "Registration seccessful"
-    PROCEED TO BACKEND
-ENDIF
+       IF (email_is_invalid) OR (password_is_invalid) THEN
+          DISPLAY "Registration failed.Please try again"
+          RETURN TO REGISTRATION_PAGE
+       ELSE 
+          DISPLAY "Registration seccessful"
+          PROCEED TO BACKEND
+       ENDIF
 
-END RegistrationValidation
+   END RegistrationValidation
 
 2. Login
 START.
-  INPUT email_address
-  INPUT password
+     INPUT email_address
+     INPUT password
 
-  PROCESS
-  user enters their email and password
-  send the login request to Firebase Authentication with email_address and pass
+     PROCESS
+       user enters their email and password
+       send the login request to Firebase Authentication with email_address and pass
 
-IF the credentials are valid THEN 
-   Firebase authenticates the user and returns an authentication token
-   DISPLAY dashboard
-ELSE IF the credentials are valid THEN
-    Firebase returns an error
-    DISPLAY login error
-ENDIF
+     IF the credentials are valid THEN 
+        Firebase authenticates the user and returns an authentication token
+     DISPLAY dashboard
+     ELSE IF the credentials are valid THEN
+          Firebase returns an error
+     DISPLAY login error
+     ENDIF
 
 END
 3. Task Creation — CRUD: Create
 START.
-  INPUT taskTitle
-  INPUT taskDescription
-  INPUT dueDate
-  INPUT otherTaskInformation
+    INPUT taskTitle
+    INPUT taskDescription
+    INPUT dueDate
+    INPUT otherTaskInformation
 
-  PROCESS
+   PROCESS
     Lecturer enters the task information
     Validate required fields (task_title, due_date, etc.)
     IF validation passes THEN
