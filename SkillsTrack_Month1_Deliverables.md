@@ -333,41 +333,40 @@ END
 
 4. Progress Calculation — CRUD: Read 
  START
-  INPUT student_id
+    INPUT student_id
 
-  PROCESS
-    Request student's task data from Firebase Firestore using student_id
-    Read completion status for each task
-    Count number_of_completed_tasks
-    Count total_number_of_tasks
-    Calculate progress_percentage = (number_of_completed_tasks / total_number_of_tasks) * 100
+    PROCESS
+       Request student's task data from Firebase Firestore using student_id
+       Read completion status for each task
+       Count number_of_completed_tasks
+       Count total_number_of_tasks
+       Calculate progress_percentage = (number_of_completed_tasks / total_number_of_tasks) * 100
 
-  OUTPUT
-    DISPLAY progress_percentage
-    DISPLAY number_of_completed_tasks
-    DISPLAY (total_number_of_tasks - number_of_completed_tasks) as remaining_tasks
+    OUTPUT
+       DISPLAY progress_percentage
+       DISPLAY number_of_completed_tasks
+       DISPLAY (total_number_of_tasks - number_of_completed_tasks) as remaining_tasks
 END
 
 5. Task Deletion — CRUD: Delete
 START
-  INPUT selected_task
-  INPUT delete_request
+     INPUT selected_task
+     INPUT delete_request
 
-PROCESS
-
-IF lecturer selects a task THEN
-   DISPLAY deletion confirmation message
-IF lecturer confirms deletion THEN
-    Send delete request to Firebase Firestore for selected_task
-IF Firestore deletes task successfully THEN
-    Refresh task list
-    DISPLAY "Task deleted successfully" 
-ELSE
-   DISPLAY error message (deletion failed)
-ENDIF   
-   ELSE
-    DISPLAY "Task remains unchanged"
-ENDIF
+     PROCESS
+       IF lecturer selects a task THEN
+          DISPLAY deletion confirmation message
+       IF lecturer confirms deletion THEN
+          Send delete request to Firebase Firestore for selected_task
+       IF Firestore deletes task successfully THEN
+          Refresh task list
+          DISPLAY "Task deleted successfully" 
+       ELSE
+          DISPLAY error message (deletion failed)
+       ENDIF   
+       ELSE
+          DISPLAY "Task remains unchanged"
+       ENDIF
     
 END
 # User Stories
