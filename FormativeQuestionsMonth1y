@@ -1,0 +1,227 @@
+5.4 Month 1 Formative Questions (92 Marks)
+
+1. Explain why the programming life cycle should be followed before coding begins.
+=The programming life cycle helps developers understand the problem, plan the solution, and identify requirements before writing code. Following the life cycle reduces errors, saves development time, and increases the chances of producing a working and maintainable application.
+
+2. List and explain the main steps of the programming life cycle. Your answer must show how each step 
+contributes to the development of a working solution
+=1. Problem Analysis
+
+The developer identifies the problem, user needs, and system requirements. This ensures that the correct solution is developed.
+
+2. Planning and Design
+A solution is planned using algorithms, flowcharts, pseudocode, data structures, and system designs. Good planning provides a clear roadmap for development.
+3. Coding / Implementation
+The design is translated into a programming language such as JavaScript. This step creates the actual application.
+4. Testing and Debugging
+The application is tested to find and fix errors, bugs, and logic problems. This helps ensure the software works correctly.
+5. Deployment
+The completed application is released to users or installed in the production environment. Users can now use the system.
+6. Maintenance and Updates
+After deployment, developers fix issues, improve performance, and add new features as requirements change. This keeps the application useful and reliable over time.
+
+3. Explain when const should be used instead of let. Also explain why var should normally be avoided in 
+modern JavaScrip
+=const should be used when a variable's value will not be reassigned after it is declared. It helps prevent accidental changes and makes code easier to understand.
+
+let should be used when the value of a variable needs to change later in the program.
+
+var should normally be avoided because it is function-scoped instead of block-scoped, which can lead to unexpected behaviour and bugs. Modern JavaScript uses let and const because they provide clearer and safer variable management.
+
+4. Explain how local and global scope can affect the reliability and maintainability of a JavaScript 
+application
+=Variables in local scope are accessible only within the function or block where they are declared, reducing accidental modification and making code easier to maintain.
+
+Global variables can be accessed from anywhere in the application, which may cause unintended changes, conflicts, and bugs, reducing reliability.
+
+5. Explain how map(), filter() and reduce() process an array of task objects differently. Provide one 
+suitable use for each method
+=map()
+Transforms every element in an array and returns a new array.
+tasks.map(task => task.title);
+=filter()
+Returns a new array containing only elements that match a condition.
+tasks.filter(task => task.completed);
+=reduce()
+Combines all elements into a single value.
+reduce()
+
+Combines all elements into a single value.
+Example use: Calculate the total number of hours.
+JavaScript
+1
+tasks.reduce((total, task) => total + task.hours, 0);
+
+6. Explain why an application should use classes or structured objects instead of storing related 
+information in several unrelated variables.
+=Classes and structured objects group related data together in a logical way. This makes code easier to read, maintain, and update.
+Using objects also reduces duplication, improves organization, and allows methods and properties to be associated with the correct data. It becomes easier to manage complex information and scale the application as it grows.
+
+7. Explain how branches, pull requests and automated checks reduce risk when developers collaborate 
+on a project.
+=Branches allow developers to work on features independently without affecting the main codebase.
+Pull requests provide a review process where team members can inspect code before it is merged.
+Automated checks such as testing and linting automatically detect bugs, errors, and coding standard violations.
+
+8. Study the following values:
+const userName = "Lerato";
+const age = 22;
+const isActive = true;
+const selectedProject = null;
+Answer the following:
+a. State the data type of each value
+=userName → String
+=age → Number
+=isActive → Boolean
+=selectedProject → Null
+
+b. Explain how age could be converted from a number to a string. 
+=Use the toString() method or the String() function.
+const ageString = age.toString();
+
+c. Explain what the typeof operator is used for.
+=The typeof operator is used to determine the data type of a variable or value.
+Example:
+typeof age; // "number"
+
+9. Analyse the following code:
+const total = "10" + 5;
+const looseComparison = 5 == "5";
+const strictComparison = 5 === "5";
+console.log(total);
+console.log(looseComparison);
+console.log(strictComparison);
+Answer the following:
+a. State the output of each console.log() statement
+=105
+2
+true
+3
+false
+4
+``
+
+b. Explain why "10" + 5 does not produce the number 15. 
+=Because "10" is a string, JavaScript performs string concatenation instead of numeric addition. The number 5 is converted to a string and joined to "10", producing "105".
+
+c. Explain the difference between == and ===.
+=== compares values after performing type conversion if necessary.
+=== compares both value and data type without type conversion.
+
+5 == "5" // true
+5 === "5" // false
+``
+
+d. Rewrite the first statement so that it produces the number 15. 
+=const total = Number("10") + 5;
+
+10. Study the following functions:
+function calculateTotal(price, quantity = 1) {
+price
+quantity
+
+c. Explain what the return keyword does
+=The return keyword sends a value back to the code that called the function and ends the function's execution.
+
+d. State the value stored in orderTotal
+
+e. State the value stored in finalTotal
+=450 - (450 × 10/100)
+450 - 45
+405
+finalTotal = 405
+
+f. Explain one difference between a function declaration and an arrow function
+=A function declaration can be called before it appears in the code because it is hoisted, while an arrow function assigned to a variable cannot be used before the variable is declared
+
+11. Study the following array:
+const tasks = [
+ { title: "Create wireframes", completed: true, hours: 3 },
+ { title: "Develop login form", completed: false, hours: 5 },
+ { title: "Test application", completed: true, hours: 2 },
+ { title: "Write documentation", completed: false, hours: 4 }
+];
+Write JavaScript code that:
+a. Uses a loop to display the title of every task
+=for (const task of tasks) {
+console.log(task.title);
+}
+
+b. Uses a conditional statement to display only completed tasks.
+=for (const task of tasks) {
+if (task.completed) {
+console.log(task.title);
+}
+}
+
+c. Counts the number of completed tasks.
+=let completedCount = 0;
+ 
+for (const task of tasks) {
+if (task.completed) {
+5
+completedCount++;
+}
+7
+}
+ 
+console.log(completedCount);
+``
+
+d. Calculates the total number of hours for all tasks.
+=let totalHours = 0;
+ 
+for (const task of tasks) {
+totalHours += task.hours;
+}
+ 
+console.log(totalHours);
+
+e. Displays an appropriate message if no tasks are available.
+=if (tasks.length === 0) {
+     console.log("No tasks available.");
+}
+
+15. Study the following statement:
+document.cookie = "theme=dark; max-age=3600; path=/";
+Answer the following:
+a. Explain what information the cookie store
+=The cookie stores a setting named theme with the value dark.
+
+b. Explain the purpose of max-age=3600.
+=It sets the cookie to expire after 3600 seconds (1 hour)
+
+c. Explain the purpose of path=/
+=It makes the cookie available to all pages and directories within the website.
+
+d. Write a JavaScript statement that displays the available cookies.
+=console.log(document.cookie);
+
+Testing and Problem-Solving
+16. A registration form contains the following fields:
+• name; 
+• email address; 
+• password; and 
+• age. 
+Develop five test cases that could be used to test the form. Each test case must include:
+• the input or condition being tested; and 
+• the expected result. 
+Your test cases must include at least one valid submission, one missing value, one invalid email address and 
+one boundary-value test
+
+=Test CaseInput / ConditionExpected Result1. Valid SubmissionName: John Smith, Email: john@email.com, Password: Pass1234, Age: 25Registration successful and form submitted.2. Missing NameName field left blank, all other fields validError message: "Name is required." Form not submitted.3. Invalid EmailEmail entered as johnemail.comError message: "Enter a valid email address." Form not submitted.4. Boundary Value (Minimum Age)Age entered as 18 (minimum allowed age)Form accepted and registration successful.5. Age Below MinimumAge entered as 17Error message: "Age must be 18 or older." Form not submitted.=150 × 3 = 450
+orderTotal = 450
+150 × 3 = 450
+
+b. Explain the purpose of the default value assigned to quantity
+=The default value of 1 is used if no quantity is supplied when the function is called.
+return price * quantity;
+a. Identify the parameters of calculateTotal().
+=The parameters are:
+}
+const finalTotal = applyDiscount(orderTotal, 10);
+Answer the following:
+const applyDiscount = (total, percentage) => {
+};
+const orderTotal = calculateTotal(150, 3);
+
