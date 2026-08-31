@@ -1,0 +1,324 @@
+
+/* ==============================
+   GENERAL PAGE
+   ============================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, sans-serif;
+
+    background: #050B24;
+    color: white;
+}
+
+
+/* ==============================
+   GAME CONTAINER
+   ============================== */
+
+.game-container {
+    width: 90%;
+    max-width: 650px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    background: #0B1233;
+
+    border: 1px solid #24305C;
+    border-radius: 20px;
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ==============================
+   HEADER
+   ============================== */
+
+.game-header h1 {
+    margin-bottom: 10px;
+
+    font-size: 36px;
+}
+
+.description {
+    color: #B8C0DD;
+
+    font-size: 15px;
+}
+
+
+/* ==============================
+   GAME INFORMATION
+   ============================== */
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    margin: 30px 0;
+}
+
+.info-box {
+    min-width: 100px;
+
+    padding: 12px 20px;
+
+    background: #141D45;
+
+    border-radius: 10px;
+}
+
+.info-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #AEB7D7;
+
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.info-box span:last-child {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+
+/* ==============================
+   MEMORY BOARD
+   ============================== */
+
+.memory-board {
+    width: 360px;
+    height: 360px;
+
+    margin: 20px auto;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    gap: 15px;
+}
+
+
+/* ==============================
+   MEMORY BUTTONS
+   ============================== */
+
+.memory-button {
+    border: none;
+
+    border-radius: 25px;
+
+    cursor: pointer;
+
+    opacity: 0.75;
+
+    transition:
+        transform 0.1s ease,
+        opacity 0.1s ease,
+        filter 0.1s ease;
+
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.25),
+        0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.memory-button:hover {
+    opacity: 0.9;
+}
+
+.memory-button:active {
+    transform: scale(0.95);
+}
+
+
+/* ==============================
+   BUTTON COLORS
+   ============================== */
+
+.green {
+    background: #20A05A;
+}
+
+.red {
+    background: #D64545;
+}
+
+.yellow {
+    background: #D8B52B;
+}
+
+.blue {
+    background: #3478C8;
+}
+
+
+/* ==============================
+   ACTIVE BUTTON
+   ============================== */
+
+.memory-button.active {
+    opacity: 1;
+
+    transform: scale(0.96);
+
+    filter: brightness(1.7);
+
+    box-shadow:
+        0 0 35px rgba(255, 255, 255, 0.55),
+        inset 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+
+/* ==============================
+   STATUS
+   ============================== */
+
+.status {
+    min-height: 24px;
+
+    margin: 20px 0;
+
+    color: #C7CEE8;
+
+    font-size: 16px;
+}
+
+
+/* ==============================
+   START / RESTART BUTTONS
+   ============================== */
+
+.start-button,
+.restart-button {
+    padding: 13px 30px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #C89B3C;
+    color: #050B24;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.start-button:hover,
+.restart-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.start-button:active,
+.restart-button:active {
+    transform: translateY(0);
+}
+
+
+/* ==============================
+   GAME OVER
+   ============================== */
+
+.game-over {
+    margin-top: 25px;
+
+    padding: 25px;
+
+    background: #141D45;
+
+    border-radius: 15px;
+}
+
+.game-over h2 {
+    margin-bottom: 10px;
+}
+
+.game-over p {
+    margin-bottom: 20px;
+
+    color: #C7CEE8;
+}
+
+.game-over strong {
+    color: #C89B3C;
+    font-size: 24px;
+}
+
+
+/* ==============================
+   HIDDEN ELEMENT
+   ============================== */
+
+.hidden {
+    display: none;
+}
+
+
+/* ==============================
+   DISABLED BUTTONS
+   ============================== */
+
+.memory-button:disabled {
+    cursor: not-allowed;
+}
+
+
+/* ==============================
+   MOBILE
+   ============================== */
+
+@media (max-width: 500px) {
+
+    .game-container {
+        padding: 25px 15px;
+    }
+
+    .game-header h1 {
+        font-size: 28px;
+    }
+
+    .memory-board {
+        width: 290px;
+        height: 290px;
+
+        gap: 10px;
+    }
+
+    .memory-button {
+        border-radius: 20px;
+    }
+
+    .game-info {
+        gap: 8px;
+    }
+
+    .info-box {
+        min-width: 80px;
+
+        padding: 10px;
+    }
+}
+

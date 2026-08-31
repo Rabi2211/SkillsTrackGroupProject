@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SkillsTrack Memory Game</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <main class="game-container">
+
+        <header class="game-header">
+            <h1>Memory Challenge</h1>
+
+            <p class="description">
+                Watch the sequence carefully and repeat it in the correct order.
+            </p>
+        </header>
+
+        <section class="game-info">
+
+            <div class="info-box">
+                <span class="info-label">Level</span>
+                <span id="level">0</span>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">Score</span>
+                <span id="score">0</span>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">Best</span>
+                <span id="high-score">0</span>
+            </div>
+
+        </section>
+
+        <section class="memory-board">
+
+            <button
+                class="memory-button green"
+                id="green"
+                data-color="green"
+                aria-label="Green button">
+            </button>
+
+            <button
+                class="memory-button red"
+                id="red"
+                data-color="red"
+                aria-label="Red button">
+            </button>
+
+            <button
+                class="memory-button yellow"
+                id="yellow"
+                data-color="yellow"
+                aria-label="Yellow button">
+            </button>
+
+            <button
+                class="memory-button blue"
+                id="blue"
+                data-color="blue"
+                aria-label="Blue button">
+            </button>
+
+        </section>
+
+        <p id="status" class="status">
+            Press Start Game to begin.
+        </p>
+
+        <button id="start-button" class="start-button">
+            Start Game
+        </button>
+
+        <section id="game-over" class="game-over hidden">
+
+            <h2>Game Over</h2>
+
+            <p>
+                Your final score:
+                <strong id="final-score">0</strong>
+            </p>
+
+            <button id="restart-button" class="restart-button">
+                Play Again
+            </button>
+
+        </section>
+
+    </main>
+
+    <script src="game.js"></script>
+
+</body>
+</html>
+
