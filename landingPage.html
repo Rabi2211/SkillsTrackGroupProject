@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillsTrack - Choose Role</title>
+  <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&family=Jaro&family=Inter:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Space background image -->
+    <img class="bg-image" src="images/background.png" alt="Space background" width="1536" height="1024">
+
+    <div class="content">
+      <!-- SkillsTrack logo -->
+      <img class="logo" src="images/logo.png" alt="SkillsTrack Logo">
+
+      <h1 class="welcome-heading">Welcome To SkillsTrack</h1>
+      <p class="subtitle">Please choose role</p>
+      <div class="brand-name" aria-label="SKILLSTRACK"></div>
+
+      <div class="buttons">
+        <button class="role-btn">LECTURER</button>
+        <button class="role-btn">LEARNER</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const brand = document.querySelector('.brand-name');
+    const word = 'SKILLSTRACK';
+
+    word.split('').forEach((char) => {
+      const letter = document.createElement('span');
+      letter.className = 'final-letter';
+      letter.textContent = char;
+      brand.appendChild(letter);
+    });
+
+    const finalLetters = [...brand.querySelectorAll('.final-letter')];
+    const scatterLetters = [];
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    finalLetters.forEach((letter, index) => {
+      const rect = letter.getBoundingClientRect();
+      letter.style.opacity = '0';
+      letter.style.transform = 'scale(0.4)';
+
+      setTimeout(() => {
+        letter.style.opacity = '1';
+        letter.style.transform = 'scale(1)';
+      }, 5000 + index * 120);
+    });
+
+    for (let i = 0; i < 70; i++) {
+      const scatter = document.createElement('span');
+      scatter.className = 'scatter-letter';
+      scatter.textContent = alphabet[Math.floor(Math.random() * alphabet.length)];
+      scatter.style.left = `${Math.random() * window.innerWidth}px`;
+      scatter.style.top = `${Math.random() * window.innerHeight}px`;
+      scatter.style.opacity = '0.9';
+      scatter.style.transform = 'translate(-50%, -50%) scale(1)';
+      document.body.appendChild(scatter);
+      scatterLetters.push(scatter);
+    }
+
+    requestAnimationFrame(() => {
+      const targetRects = finalLetters.map((letter) => {
+        const rect = letter.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        };
+      });
+
+      scatterLetters.forEach((scatter, index) => {
+        const duration = 3200 + Math.random() * 2000;
+        const target = targetRects[index % targetRects.length];
+
+        scatter.style.transition = `left ${duration}ms cubic-bezier(0.22, 1, 0.36, 1), top ${duration}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${duration}ms ease, transform ${duration}ms ease`;
+        scatter.style.left = `${target.x}px`;
+        scatter.style.top = `${target.y}px`;
+        scatter.style.opacity = '1';
+        scatter.style.transform = 'translate(-50%, -50%) scale(1.1)';
+      });
+
+      setTimeout(() => {
+        scatterLetters.forEach((scatter) => {
+          scatter.style.opacity = '0';
+          scatter.style.transform = 'translate(-50%, -50%) scale(0.3)';
+        });
+      }, 5000);
+    });
+  </script>
+</body>
+</html>
