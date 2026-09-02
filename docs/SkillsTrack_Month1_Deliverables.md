@@ -31,7 +31,8 @@ START.
 END.
 
 inputs: student@example.com, Reabetswe Mashigo, Skills@123
-| iterations | input | Password Contains Special Character? | email valid? | firebase Request | Registation Status | Output
+| iterations | input | Password Contains Special Character? | email valid? | firebase Request | Registration Status | Output |
+|---|---|---|---|---|---|---|
 | 1 | student@example.com, Reabetswe Mashigo, Skills@123 | - | - | - | - | - |
 | 2 | student@example.com, Reabetswe Mashigo, Skills@123 | yes(@) | - | - | - | - |
 | 3 | student@example.com, Reabetswe Mashigo, Skills@123 |yes | yes | - | - | - | - |
