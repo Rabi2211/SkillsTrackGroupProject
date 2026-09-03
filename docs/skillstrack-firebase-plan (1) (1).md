@@ -38,7 +38,7 @@ async function login(email, password, assessorId = null) {
 
 ---
 
-## 2. Realtime Database Tree (flat JSON, per §3.1)
+## 2. Realtime Database Tree 
 
 ```
 skillstrack-app/
@@ -53,10 +53,10 @@ skillstrack-app/
 ### `users/{uid}`
 | Field | Type | Notes |
 |---|---|---|
-| displayName | string | required by §3.1 |
+| displayName | string |  |
 | email | string | matches Auth email |
 | role | string | `"learner"` \| `"admin"` |
-| createdAt | timestamp | required by §3.1 |
+| createdAt | timestamp | required  |
 | totalTasks / completed / outstanding / overdue | number | denormalized dashboard counters |
 | taskAverage / gameAverage | number | denormalized progress circles |
 | gender | string | **extension** — admin gender-split pie charts |
@@ -87,7 +87,7 @@ Body: { "displayName": "...", "photoUrl": "..." }
 GET https://PROJECT_ID.firebaseio.com/users.json?auth={idToken}&orderBy="role"&equalTo="learner"
 ```
 
-### `tasks/{taskId}` — **base model: owned by the learner** (§3.1, Required Users table)
+### `tasks/{taskId}` — **base model: owned by the learner** 
 | Field | Type | Notes |
 |---|---|---|
 | userId | string | owning learner's uid — **not** an array of learners |
@@ -95,7 +95,7 @@ GET https://PROJECT_ID.firebaseio.com/users.json?auth={idToken}&orderBy="role"&e
 | category | string | |
 | dueDate | timestamp | |
 | priority | string | `low` \| `medium` \| `high` |
-| completed | boolean | §3.1's field name — drives dashboard totals |
+| completed | boolean |  field name — drives dashboard totals |
 | createdAt | timestamp | |
 | assessorId | string\|null | **extension** — set when an assessor issues the task |
 
@@ -165,7 +165,7 @@ Body: { "status": "scheduled" }
 DELETE https://PROJECT_ID.firebaseio.com/bookings/{bookingId}.json?auth={idToken}
 ```
 
-### `scores/{scoreId}` (mini-game results, §2.3/§7.3)
+### `scores/{scoreId}` 
 | Field | Type | Notes |
 |---|---|---|
 | userId | string | |
@@ -186,7 +186,7 @@ async function submitScore(idToken, uid, { score, duration }) {
 GET https://PROJECT_ID.firebaseio.com/scores.json?auth={idToken}&orderBy="userId"&equalTo="{uid}"
 ```
 
-### `resources/{resourceId}` (optional learning resources, §3.1)
+### `resources/{resourceId}` 
 | Field | Type | Notes |
 |---|---|---|
 | title | string | |
@@ -315,32 +315,5 @@ security rules below can evaluate `auth.uid`.
 No branch permits unrestricted public read/write (per §3.2). Passwords are never written to
 any of these paths — they live only in Firebase Authentication.
 
----
-
-## 5. Base spec vs. extensions — what needs Assessor sign-off
-
-| In the doc | Status |
-|---|---|
-| `users`, `tasks` (learner-owned), `bookings`, `scores`, `resources`, native RTDB REST, Auth flow | **Base spec** — matches §3.1 directly |
-| `gender` on `users`, `assessorId` on `users`/`tasks`, `reports` node, "Add Guide" as a distinct upload flow, gender-split pie charts | **Extension** — beyond the minimum brief; note these in your Month 1 submission as adapted with Assessor approval, per §3.1 |
-
-### 5.1 Extension approval request
-
-> §3.1 states: *"A suggested structure is shown below; teams may adapt it with Assessor
-> approval."* The following fields/nodes extend that suggested structure and need sign-off
-> at the Month 1 review session (§4.1) before they're relied on for marks:
->
-> 1. **`gender` on `users/{uid}`** — drives the admin dashboard's female/male/overall
->    progress pie charts shown in the wireframes.
-> 2. **`assessorId` on `users/{uid}` and `tasks/{taskId}`** — traces which assessor a task
->    was issued by, and gates admin login to a matching assessor code.
-> 3. **`reports/{reportId}`** — stores a generated snapshot for the printable class
->    progress report ("Learner Progress Report" wireframe).
-> 4. **`resources/{resourceId}.uploadedBy`** and the "Add Guide" upload flow as a distinct
->    admin action from general resource management.
->
-> Rationale: the base brief's `tasks/{taskId}` model treats tasks as learner-owned and
-> gives the admin/assessor role only booking-review access (§2.2). The wireframes call for
-> a broader admin surface (issuing tasks, uploading guides, running class-wide reports), so
-> these fields close that gap without changing the base learner-owned task shape.
+--
 
