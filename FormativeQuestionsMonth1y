@@ -1,4 +1,4 @@
-5.4 Month 1 Formative Questions (92 Marks)
+/* 5.4 Month 1 Formative Questions (92 Marks)
 
 1. Explain why the programming life cycle should be followed before coding begins.
 =The programming life cycle helps developers understand the problem, plan the solution, and identify requirements before writing code. Following the life cycle reduces errors, saves development time, and increases the chances of producing a working and maintainable application.
@@ -224,4 +224,5 @@ Answer the following:
 const applyDiscount = (total, percentage) => {
 };
 const orderTotal = calculateTotal(150, 3);
+*/
 

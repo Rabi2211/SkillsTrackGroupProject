@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Administration Account</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- Close button -->
+        <button class="close-button" id="closeButton">
+            X
+        </button>
+
+
+        <!-- Heading -->
+        <h1>Create Administration Account</h1>
+
+
+        <!-- Account form -->
+        <div class="account-box">
+
+            <form id="accountForm">
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">
+                        Name or Surname
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                    >
+                </div>
+
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">
+                        Username (email address)
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                    >
+                </div>
+
+
+                <!-- Password -->
+                <div class="form-group password-group">
+
+                    <label for="password">
+                        Password
+                        <span>(Must use capital character)</span>
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Repeat password -->
+                <div class="form-group">
+
+                    <label for="repeatPassword">
+                        Retype Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="repeatPassword"
+                        name="repeatPassword"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Create account -->
+                <button
+                    type="submit"
+                    class="create-button"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
