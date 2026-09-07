@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lecturer Portal</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="portal">
+
+        <h1>Welcome To Lecturer Portal</h1>
+
+        <div class="options">
+
+            <p>
+                Are you NEW to the administration
+                <a href="#" id="signupLink">sign-up here</a>
+            </p>
+
+            <p>
+                if not then please
+                <a href="#" id="loginLink">login</a>
+            </p>
+
+        </div>
+
+        <!-- Logo -->
+        <div class="logo-container" id="logo" aria-label="Lecturer Portal Logo">
+            <div class="logo-mark" aria-hidden="true"></div>
+        </div>
+
+    </div>
+
+
+    <!-- SIGN UP POPUP -->
+    <div class="popup" id="signupPopup">
+
+        <div class="popup-content">
+
+            <span class="close" id="closeSignup">&times;</span>
+
+            <h2>Lecturer Sign Up</h2>
+
+            <form id="signupForm">
+
+                <input
+                    type="text"
+                    id="signupName"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <input
+                    type="password"
+                    id="signupPassword"
+                    placeholder="Password"
+                    required
+                >
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p id="signupMessage"></p>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOGIN POPUP -->
+    <div class="popup" id="loginPopup">
+
+        <div class="popup-content">
+
+            <span class="close" id="closeLogin">&times;</span>
+
+            <h2>Lecturer Login</h2>
+
+            <form id="loginForm">
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                    required
+                >
+
+                <button type="submit">
+                    Login
+                </button>
+
+                <a class="forgot-link" href="../lectureForgotPassword/forgotPassword.html">
+                    Forgot password?
+                </a>
+
+            </form>
+
+            <p id="loginMessage"></p>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
