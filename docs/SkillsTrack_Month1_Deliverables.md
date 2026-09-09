@@ -42,6 +42,33 @@ inputs: student@example.com, Reabetswe Mashigo, Skills@123
 | 7 | student@example.com, Reabetswe Mashigo, Skills@123 | yes | yes | sent | successful | "Please check your email to verify your account." |
 | 8 | - | - | - | - | - | go to login |
 
+## Registration Trace Table
+
+**Input:**
+`student@example.com, Reabetswe Mashigo, Skills@123`
+
+| Iteration | Input                                                | Password Contains Special Character? | Email Valid? | Firebase Request | Registration Status | Output                                            |
+| --------: | ---------------------------------------------------- | ------------------------------------ | ------------ | ---------------- | ------------------- | ------------------------------------------------- |
+|         1 | `student@example.com, Reabetswe Mashigo, Skills@123` | -                                    | -            | -                | -                   | -                                                 |
+|         2 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes (`@`)                            | -            | -                | -                   | -                                                 |
+|         3 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes                                  | Yes          | -                | -                   | -                                                 |
+|         4 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes                                  | Yes          | Sent             | -                   | -                                                 |
+|         5 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes                                  | Yes          | Sent             | Successful          | Account created                                   |
+|         6 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes                                  | Yes          | Sent             | Successful          | Verification email sent                           |
+|         7 | `student@example.com, Reabetswe Mashigo, Skills@123` | Yes                                  | Yes          | Sent             | Successful          | "Please check your email to verify your account." |
+|         8 | -                                                    | -                                    | -            | -                | -                   | Go to login                                       |
+
+### Process Summary
+
+1. User enters their email, name and password.
+2. The password is checked for a special character.
+3. The email address is validated.
+4. A registration request is sent to Firebase.
+5. Firebase successfully creates the account.
+6. A verification email is sent to the user.
+7. The user is instructed to check their email and verify the account.
+8. The user proceeds to the login page.
+
 2.
 START.
   Input:
