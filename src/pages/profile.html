@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillsTrack — Profile</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <div class="profile-overlay">
+      <img class="background-image" src="../../public/images/background.png" alt="Galaxy background" />
+
+      <button class="close-btn" aria-label="Close" id="closeProfileBtn">&times;</button>
+
+      <div class="avatar">
+        <svg viewBox="0 0 169 154" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="84" cy="50" r="40" fill="#4F378B" />
+          <path d="M0 154c0-46.4 37.6-84 84-84s84 37.6 84 84" fill="#4F378B" />
+        </svg>
+      </div>
+
+      <div class="user-info">
+        <div class="name">[Name &amp; Surname]</div>
+        <div class="username">[username]</div>
+      </div>
+
+      <div class="menu-card">
+        <a href="#">Edit profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Sign out</a>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('closeProfileBtn').addEventListener('click', function(){
+        window.location.href = '/learner-portal.html';
+      });
+    </script>
+  </body>
+</html>

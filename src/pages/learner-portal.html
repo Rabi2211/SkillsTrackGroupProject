@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillsTrack — Learner Portal</title>
+    <link rel="stylesheet" href="../styles.css">
+  </head>
+  <body>
+    <div class="dashboard">
+      <header class="dashboard-header">
+        <img src="../../public/images/logo.png" class="dashboard-logo" alt="SkillsTrack Logo" />
+
+        <a href="/profile.html" class="profile-button" aria-label="Open profile page">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z" />
+          </svg>
+        </a>
+      </header>
+
+      <nav class="dashboard-nav">
+        <a href="/learner-portal.html">Dashboard</a>
+        <a href="#">Tasks</a>
+        <a href="#">Bookings</a>
+        <a href="#">Resources</a>
+      </nav>
+
+      <h1 class="welcome-title">Welcome To Learner Portal</h1>
+
+      <div class="stats-wrap">
+        <div class="stats-labels">
+          <div>Total Tasks</div>
+          <div>Completed</div>
+          <div>Outstanding</div>
+          <div>Overdue</div>
+        </div>
+        <div class="stats-container">
+          <div class="stat-box"><span class="stat-number">0</span></div>
+          <div class="stat-box"><span class="stat-number">0</span></div>
+          <div class="stat-box"><span class="stat-number">0</span></div>
+          <div class="stat-box"><span class="stat-number">0</span></div>
+        </div>
+      </div>
+
+      <section class="upcoming-tasks">
+        <h3>Upcoming Tasks</h3>
+        <button class="open-button">Open</button>
+      </section>
+
+      <section class="progress-container">
+        <div class="progress-item">
+          <div class="progress-circle"><span>75%</span></div>
+          <div class="progress-label">Task Average</div>
+        </div>
+
+        <div class="progress-item">
+          <div class="progress-circle"><span>75%</span></div>
+          <div class="progress-label">Game Average</div>
+        </div>
+      </section>
+
+      <section class="task-progress">
+        <div class="task-row">
+          <div class="task-name"><span>NAME OF TASK</span><span>75%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+        </div>
+
+        <div class="task-row">
+          <div class="task-name"><span>NAME OF TASK</span><span>80%</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+        </div>
+
+        <div class="task-row">
+          <div class="task-name"><span>NAME OF TASK</span><span>65%</span></div>
+          <div class="progress-bar"><div class="progress-fill blue" style="width:65%"></div></div>
+        </div>
+
+        <div class="task-row">
+          <div class="task-name"><span>NAME OF TASK</span><span>Pending</span></div>
+          <div class="progress-bar"><div class="progress-fill pending" style="width:100%"></div></div>
+        </div>
+      </section>
+    </div>
+      <script src="../../scripts/fit.js"></script>
+  </body>
+</html>
