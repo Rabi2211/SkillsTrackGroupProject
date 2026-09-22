@@ -4,83 +4,100 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SkillsTrack — Learner Portal</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
-    <div class="dashboard">
-      <header class="dashboard-header">
-        <img src="../../public/images/logo.png" class="dashboard-logo" alt="SkillsTrack Logo" />
+    <div class="portal-shell">
+      <header class="portal-header">
+        <a class="portal-brand" href="learner-portal.html" aria-label="Back to dashboard">
+          <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
+        </a>
 
-        <a href="/profile.html" class="profile-button" aria-label="Open profile page">
+        <button class="portal-profile" aria-label="Open profile">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
             <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z" />
           </svg>
-        </a>
+        </button>
       </header>
 
-      <nav class="dashboard-nav">
-        <a href="/learner-portal.html">Dashboard</a>
+      <nav class="portal-nav" aria-label="Main navigation">
+        <a href="learner-portal.html">Dashboard</a>
         <a href="#">Tasks</a>
         <a href="#">Bookings</a>
         <a href="#">Resources</a>
       </nav>
 
-      <h1 class="welcome-title">Welcome To Learner Portal</h1>
+      <main class="portal-main">
+        <h1 class="portal-title">Welcome To Learner Portal</h1>
 
-      <div class="stats-wrap">
-        <div class="stats-labels">
-          <div>Total Tasks</div>
-          <div>Completed</div>
-          <div>Outstanding</div>
-          <div>Overdue</div>
-        </div>
-        <div class="stats-container">
-          <div class="stat-box"><span class="stat-number">0</span></div>
-          <div class="stat-box"><span class="stat-number">0</span></div>
-          <div class="stat-box"><span class="stat-number">0</span></div>
-          <div class="stat-box"><span class="stat-number">0</span></div>
-        </div>
-      </div>
-
-      <section class="upcoming-tasks">
-        <h3>Upcoming Tasks</h3>
-        <button class="open-button">Open</button>
-      </section>
-
-      <section class="progress-container">
-        <div class="progress-item">
-          <div class="progress-circle"><span>75%</span></div>
-          <div class="progress-label">Task Average</div>
+        <div class="statusbar" aria-label="Learner statistics">
+          <div class="statusbar__header">
+            <div class="statusbar__header-item">Total Tasks</div>
+            <div class="statusbar__header-item">Completed</div>
+            <div class="statusbar__header-item">Outstanding</div>
+            <div class="statusbar__header-item">Overdue</div>
+          </div>
+          <div class="statusbar__body">
+            <div class="statusbar__cards-wrap">
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+            </div>
+          </div>
         </div>
 
-        <div class="progress-item">
-          <div class="progress-circle"><span>75%</span></div>
-          <div class="progress-label">Game Average</div>
-        </div>
-      </section>
+        <section class="learner-content" aria-label="Learner overview">
+          <div class="upcoming-panel">
+            <h2>Upcoming Tasks</h2>
+            <button type="button" class="open-button">Open</button>
+          </div>
 
-      <section class="task-progress">
-        <div class="task-row">
-          <div class="task-name"><span>NAME OF TASK</span><span>75%</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
-        </div>
+          <div class="averages-panel">
+            <div class="average-item">
+              <div class="ring ring-task">
+                <span>75%</span>
+              </div>
+              <div class="average-label">Task Average</div>
+            </div>
 
-        <div class="task-row">
-          <div class="task-name"><span>NAME OF TASK</span><span>80%</span></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-        </div>
+            <div class="average-item">
+              <div class="ring ring-game">
+                <span>75%</span>
+              </div>
+              <div class="average-label">Game Average</div>
+            </div>
+          </div>
+        </section>
 
-        <div class="task-row">
-          <div class="task-name"><span>NAME OF TASK</span><span>65%</span></div>
-          <div class="progress-bar"><div class="progress-fill blue" style="width:65%"></div></div>
-        </div>
+        <section class="progress-list" aria-label="Task progress conditions">
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-green" style="width: 75%"></div></div>
+          </div>
 
-        <div class="task-row">
-          <div class="task-name"><span>NAME OF TASK</span><span>Pending</span></div>
-          <div class="progress-bar"><div class="progress-fill pending" style="width:100%"></div></div>
-        </div>
-      </section>
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-green" style="width: 75%"></div></div>
+          </div>
+
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-blue" style="width: 75%"></div></div>
+          </div>
+
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">Pending</span>
+            <div class="track"><div class="fill fill-light" style="width: 100%"></div></div>
+          </div>
+        </section>
+      </main>
     </div>
-      <script src="../../scripts/fit.js"></script>
+
+    <script src="../../scripts/fit.js"></script>
   </body>
 </html>
