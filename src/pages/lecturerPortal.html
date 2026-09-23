@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lecturer Portal</title>
-  <link rel="stylesheet" href="../styles.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lecturer Portal</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
 
-<body>
-  <main class="desktop-7">
-    <header class="header">
-      <img class="logo" src="logo.png" alt="SkillsTrack">
+  <body>
+    <main class="desktop-7 lecturer-portal">
+      <header class="header">
+        <a href="lecturerPortal.html" aria-label="Back to lecturer dashboard">
+          <img class="logo" src="../../public/images/logo.png" alt="SkillsTrack logo" />
+        </a>
 
-      <button class="menu-button" aria-label="Open menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </header>
+        <button class="menu-button" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </header>
 
-    <h1 class="portal-title">Welcome To Lecturer Portal</h1>
+      <h1 class="portal-title">Welcome To Lecturer Portal</h1>
 
-    <section class="actions-card">
-      <article class="action">
-        <h2>Add Tasks</h2>
-        <p>Fill form to add tasks</p>
-        <button type="button" aria-label="Add task">+</button>
-      </article>
+      <div class="lecturer-layout">
+        <div class="left-column">
+          <section class="actions-card" aria-label="Add task actions">
+            <article class="action">
+              <h2>Add Tasks</h2>
+              <p>Fill form to add tasks</p>
+              <button type="button" aria-label="Add task">+</button>
+            </article>
 
-      <div class="divider"></div>
+            <div class="divider" aria-hidden="true"></div>
 
-      <article class="action">
-        <h2>Add Guide</h2>
-        <p>Upload a pdf form of guide</p>
-        <button type="button" aria-label="Upload guide">+</button>
-      </article>
-    </section>
+            <article class="action">
+              <h2>Add Guide</h2>
+              <p>Upload a pdf file of guide</p>
+              <button type="button" aria-label="Upload guide">+</button>
+            </article>
+          </section>
 
-    <section class="report-card">
-      <h2>Download learners reoport</h2>
-      <button type="button">Print</button>
-    </section>
-
-    <section class="progress-card">
-      <h2>Learner’s Progress</h2>
-
-      <div class="overall">
-        <div class="progress-ring">
-          <strong>75%</strong>
+          <section class="report-card" aria-label="Download learner report">
+            <h2>Download learners report</h2>
+            <button type="button">Print</button>
+          </section>
         </div>
-        <p>OverAll</p>
-      </div>
 
-      <div class="progress-groups">
-        <div class="progress-item">
-          <div class="progress-ring">
-            <strong>75%</strong>
+        <section class="progress-card" aria-label="Learner progress overview">
+          <h2>Learner's Progress</h2>
+
+          <div class="overall">
+            <div class="progress-ring large-ring">
+              <strong>75%</strong>
+            </div>
+            <p>OverAll</p>
           </div>
-          <p>Female Learners</p>
-        </div>
 
-        <div class="progress-item">
-          <div class="progress-ring">
-            <strong>75%</strong>
+          <div class="progress-groups">
+            <div class="progress-item">
+              <div class="progress-ring small-ring">
+                <strong>75%</strong>
+              </div>
+              <p>Female Learners</p>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-ring small-ring">
+                <strong>75%</strong>
+              </div>
+              <p>Male Learners</p>
+            </div>
           </div>
-          <p>Male Learners</p>
-        </div>
+        </section>
       </div>
-    </section>
-  </main>
-</body>
+    </main>
+  </body>
 </html>

@@ -107,7 +107,7 @@ body {
 .portal-title {
   margin: 1rem auto 1.4rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.75);
+  color: #ffffff;
   font-size: clamp(2rem, 2.6vw, 2.8rem);
   font-weight: 400;
   font-family: "Inter", sans-serif;
@@ -385,13 +385,14 @@ body {
 .actions-card {
   position: absolute;
   top: 311px;
-  left: 87px;
+  left: 80px;
   width: 449px;
   height: 278px;
   display: grid;
   grid-template-columns: 1fr 2px 1fr;
   padding: 35px 30px;
   background: rgba(166, 106, 63, 0.75);
+  
 }
 
 .action {
@@ -431,7 +432,7 @@ body {
 
 .report-card {
   position: absolute;
-  top: 705px;
+  top: 450px;
   left: 87px;
   width: 609px;
   height: 238px;
@@ -524,3 +525,297 @@ body {
 .progress-item p {
   white-space: nowrap;
 }
+
+.desktop-7.lecturer-portal {
+  width: 100vw;
+  max-width: none;
+  min-height: 100vh;
+  height: 100vh;
+  margin: 0;
+  background: rgba(5, 11, 36, 0.87);
+  border: none;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  width: calc(100% - 48px);
+  height: 68px;
+  background: rgba(196, 154, 108, 0.75);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px 0 18px;
+  box-sizing: border-box;
+  margin: 23px auto 0;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  object-fit: contain;
+}
+
+.menu-button {
+  width: 42px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-button span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: rgba(15, 36, 58, 0.85);
+  border-radius: 2px;
+}
+
+.portal-title {
+  margin: 28px 0 26px;
+  text-align: center;
+  color: rgba(184, 121, 65, 0.75);
+  font-size: clamp(2.1rem, 2vw, 2.9rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-family: "Italiana", serif;
+}
+
+.lecturer-layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 78px;
+  padding: 0 48px 22px;
+  margin-left: -940px;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+  margin-left: -8px;
+}
+
+.actions-card,
+.report-card {
+  width: 470px;
+  background: rgba(196, 160, 114, 0.9);
+  box-sizing: border-box;
+}
+
+.actions-card {
+  background: rgba(166, 106, 63, 0.75);
+  height: 260px;
+  padding: 30px 28px 26px;
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.action {
+  text-align: center;
+}
+
+.action h2,
+.report-card h2,
+.progress-card > h2 {
+  margin: 0;
+  font-family: "Italiana", serif;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.action h2 {
+  font-size: 25px;
+  margin-bottom: 42px;
+}
+
+.action p {
+  margin: 0 0 20px;
+  min-height: 22px;
+  color: #ffffff;
+  font-size: 15px;
+  line-height: 1.3;
+  font-family: "Italiana", serif;
+  white-space: nowrap;
+}
+
+.action button,
+.report-card button {
+  border: none;
+  background: rgba(217, 217, 217, 0.9);
+  color: #000;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+}
+
+.action button {
+  width: 42px;
+  height: 31px;
+  font-size: 28px;
+  line-height: 1;
+  padding: 0;
+}
+
+.divider {
+  width: 2px;
+  height: 112px;
+  margin-top: 40px;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.report-card {
+  width: 650px;
+  height: 230px;
+  padding-top: 34px;
+  text-align: center;
+  margin-top: 44px;
+}
+
+.report-card h2 {
+  font-size: 22px;
+  margin-bottom: 40px;
+  font-family: "Italiana", serif;
+  color: #ffffff;
+}
+
+.report-card button {
+  width: 74px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.progress-card {
+  width: 700px;
+  height: 520px;
+  background: rgba(74, 47, 28, 0.85);
+  padding-top: 20px;
+  box-sizing: border-box;
+  margin-top: -140px;
+  margin-left: 23px;
+}
+
+.progress-card > h2 {
+  font-size: 22px;
+  color: #ffffff;
+  text-align: center;
+  font-family: "Italiana", serif;
+}
+
+.overall {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.progress-groups {
+  display: flex;
+  justify-content: center;
+  gap: 46px;
+  margin-top: 10px;
+}
+
+.progress-item {
+  text-align: center;
+}
+
+.progress-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(#4f46e5 0 75%, #f3f4f6 75% 100%);
+}
+
+.large-ring {
+  width: 116px;
+  height: 116px;
+  margin: 0 auto;
+}
+
+.small-ring {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 12px;
+}
+
+.progress-ring::before {
+  content: "";
+  position: absolute;
+  width: 89px;
+  height: 89px;
+  border-radius: 50%;
+  background: rgba(74, 47, 28, 0.85);
+  inset: 13px;
+}
+
+.small-ring::before {
+  width: 80px;
+  height: 80px;
+  inset: 15px;
+}
+
+.progress-ring strong {
+  position: relative;
+  z-index: 1;
+  font: 800 25px "Inter", sans-serif;
+  color: rgba(255,255,255,0.9);
+}
+
+.overall p,
+.progress-item p {
+  margin: 12px 0 0;
+  font-size: 18px;
+  color: #ffffff;
+  font-family: "Italiana", serif;
+}
+
+.progress-item p {
+  white-space: nowrap;
+  font-size: 16px;
+}
+
+@media (max-width: 980px) {
+  .desktop-7.lecturer-portal {
+    width: calc(100vw - 24px);
+    margin: 12px auto;
+  }
+
+  .lecturer-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .actions-card,
+  .report-card,
+  .progress-card {
+    width: min(100%, 420px);
+  }
+
+  .progress-groups {
+    gap: 18px;
+  }
+
+  .portal-title {
+    font-size: 2rem;
+  }
+}
+
