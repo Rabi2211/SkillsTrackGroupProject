@@ -87,8 +87,8 @@
   // role buttons navigation
   const learnerBtn = document.getElementById('learnerBtn');
   const lecturerBtn = document.getElementById('lecturerBtn');
-  if(learnerBtn) learnerBtn.addEventListener('click', ()=> location.href = 'learner-portal.html');
-  if(lecturerBtn) lecturerBtn.addEventListener('click', ()=> alert('Lecturer page not created'));
+  if(learnerBtn) learnerBtn.addEventListener('click', ()=> window.location.assign(new URL('./learner-portal.html', window.location.href).href));
+  if(lecturerBtn) lecturerBtn.addEventListener('click', ()=> window.location.assign(new URL('./lecturerPortal.html', window.location.href).href));
 
 })();
  
