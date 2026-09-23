@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles.css" />
+    <title>SkillsTrack — Tasks</title>
+  </head>
+  <body>
+    <div class="tasks-page">
+      <header class="tasks-header">
+        <div class="tasks-brand" aria-label="SkillsTrack logo">
+          <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
+        </div>
+
+        <nav class="tasks-nav" aria-label="Main navigation">
+          <a href="#">Dashboard</a>
+          <a href="#" class="active">Tasks</a>
+          <a href="#">Bookings</a>
+          <a href="#">Resources</a>
+        </nav>
+
+        <button type="button" class="tasks-profile" aria-label="Profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.87 0-7 2.24-7 5v1h14v-1c0-2.76-3.13-5-7-5Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </header>
+
+      <main class="tasks-main">
+        <h1 class="tasks-title">Welcome To TASKS</h1>
+
+        <section class="tasks-stats" aria-label="Task counts">
+          <div class="tasks-stat-card">
+            <div class="tasks-stat-label">Total Tasks</div>
+            <div class="tasks-stat-value">0</div>
+          </div>
+          <div class="tasks-stat-card">
+            <div class="tasks-stat-label">Completed</div>
+            <div class="tasks-stat-value">0</div>
+          </div>
+          <div class="tasks-stat-card">
+            <div class="tasks-stat-label">Outstanding</div>
+            <div class="tasks-stat-value">0</div>
+          </div>
+          <div class="tasks-stat-card">
+            <div class="tasks-stat-label">Overdue</div>
+            <div class="tasks-stat-value">0</div>
+          </div>
+        </section>
+
+        <section class="tasks-panel" aria-label="Task overview panel">
+          <section class="tasks-status-row" aria-label="Task status row">
+            <div class="tasks-frame-status">
+              <span>Frame status</span>
+              <span class="status-name">[NAME OF TASKS]</span>
+            </div>
+            <div class="tasks-progress-indicator" aria-hidden="true">
+              <div class="tasks-progress-bar"><span></span></div>
+            </div>
+            <div class="tasks-face-group" aria-hidden="true">
+              <div class="face face-sad"></div>
+              <div class="face face-happy"></div>
+            </div>
+          </section>
+
+          <section class="tasks-lower-panel" aria-label="Task table and actions">
+            <div class="tasks-table-wrap">
+              <table class="tasks-table">
+                <thead>
+                  <tr>
+                    <th>Tasks</th>
+                    <th>Due date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Task 1</td>
+                    <td>--</td>
+                    <td>Pending</td>
+                    <td><button type="button">Open</button></td>
+                  </tr>
+                  <tr>
+                    <td>Task 2</td>
+                    <td>--</td>
+                    <td>Pending</td>
+                    <td><button type="button">Open</button></td>
+                  </tr>
+                  <tr>
+                    <td>Task 3</td>
+                    <td>--</td>
+                    <td>Pending</td>
+                    <td><button type="button">Open</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="tasks-footer-actions">
+              <button type="button" class="tasks-support-btn">BOOK SUPPORT</button>
+              <button type="button" class="tasks-print-btn">PRINT REPORT</button>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
