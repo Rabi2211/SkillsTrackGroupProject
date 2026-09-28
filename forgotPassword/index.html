@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <button type="button" class="close-btn" aria-label="Close">&times;</button>
+
+        <h1>Forgot Password</h1>
+
+        <div class="card">
+            <form id="forgotPasswordForm">
+
+                <div class="input-group">
+                    <label for="newPassword">Type New Password</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirmPassword">Retype New Password</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+
+                <button type="submit" class="reset-btn">
+                    Reset Password
+                </button>
+
+                <p id="message"></p>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
