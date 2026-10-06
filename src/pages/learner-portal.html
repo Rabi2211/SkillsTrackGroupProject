@@ -99,5 +99,34 @@
     </div>
 
     <script src="../../scripts/fit.js"></script>
+    <script>
+      (function () {
+        function updateRing(ring, label, percent) {
+          if (!ring || !label) return;
+          const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
+          label.textContent = safePercent + "%";
+          ring.style.background = "conic-gradient(#6f66ff 0 " + safePercent + "%, rgba(255,255,255,0.18) " + safePercent + "% 100%)";
+        }
+
+        const taskCards = Array.from(document.querySelectorAll(".statusbar__card"));
+        const taskRing = document.querySelector(".ring-task");
+        const taskLabel = taskRing ? taskRing.querySelector("span") : null;
+
+        if (taskCards.length >= 2) {
+          const totalTasks = Number(taskCards[0].textContent.trim()) || 0;
+          const completedTasks = Number(taskCards[1].textContent.trim()) || 0;
+          const taskPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 75;
+          updateRing(taskRing, taskLabel, taskPercent);
+        } else {
+          updateRing(taskRing, taskLabel, 75);
+        }
+
+        const gameRing = document.querySelector(".ring-game");
+        const gameLabel = gameRing ? gameRing.querySelector("span") : null;
+        const savedHighScore = Number(localStorage.getItem("skillsTrackMemoryHighScore") || 0);
+        const gamePercent = savedHighScore > 0 ? Math.min(100, Math.round((savedHighScore / 20) * 100)) : 75;
+        updateRing(gameRing, gameLabel, gamePercent);
+      })();
+    </script>
   </body>
 </html>
