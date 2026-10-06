@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillsTrack — Lecturer Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#05070f;
+    --parchment:#efe7d8;
+    --ink:#3a2f22;
+    --border-brown:#7a5230;
+    --row:#e0d3ba;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse 900px 600px at 15% 20%, rgba(90,60,170,.30), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 85% 80%, rgba(40,80,190,.25), transparent 60%),
+      var(--bg-void);
+    display:flex; align-items:center; justify-content:center;
+    padding:40px 18px;
+    font-family:'Inter',sans-serif;
+  }
+
+  .shell{ width:100%; max-width:760px; }
+
+  .back-row{ margin-bottom:10px; }
+  .back-row button{
+    background:none; border:none; color:#c7cdea; font-size:1.3rem; cursor:pointer;
+  }
+  .back-row button:hover{ color:#fff; }
+
+  .lecreport-card{
+    background:var(--parchment); color:var(--ink);
+    border:6px solid var(--border-brown); border-radius:2px;
+    padding:38px 42px;
+    font-family:'Cormorant Garamond',serif;
+    box-shadow:0 25px 60px rgba(0,0,0,.5);
+  }
+
+  .lec-brand{ text-align:center; font-size:1.7rem; font-weight:600; margin-bottom:4px; letter-spacing:.02em; }
+  .lec-sub{
+    text-align:center; font-size:1rem; letter-spacing:.09em; margin-bottom:26px;
+    text-transform:uppercase; color:#5c4a34;
+  }
+
+  .lec-field-row{ display:flex; gap:28px; margin-bottom:10px; font-size:1.05rem; }
+  .lec-field-row div{ flex:1; border-bottom:1px solid var(--border-brown); padding-bottom:5px; }
+  .lec-field-row label{ font-weight:600; }
+  .lec-field-row input{
+    border:none; background:transparent; font:inherit; color:var(--ink);
+    width:70%; outline:none;
+  }
+
+  h5{
+    font-size:1.05rem; letter-spacing:.06em; margin:26px 0 10px;
+    border-bottom:1px solid var(--border-brown); padding-bottom:5px; font-family:'Inter',sans-serif; font-weight:600;
+  }
+
+  table.lectable{ width:100%; border-collapse:collapse; font-size:.98rem; }
+  table.lectable th, table.lectable td{
+    border:1px solid #a9895f; padding:8px 10px; text-align:left;
+  }
+  table.lectable th{ background:var(--row); font-family:'Inter',sans-serif; font-weight:600; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }
+  table.lectable input{ width:100%; border:none; background:transparent; font:inherit; outline:none; }
+  table.lectable tfoot td{ font-weight:600; background:#e8dcc4; }
+
+  .lec-sign{ display:flex; justify-content:space-between; margin-top:28px; font-size:.98rem; gap:30px; }
+  .lec-sign .line{ border-bottom:1px solid var(--border-brown); display:inline-block; min-width:170px; }
+
+  .toolbar{ display:flex; justify-content:center; gap:12px; margin-top:24px; }
+  .btn{
+    font:600 .85rem 'Inter',sans-serif; padding:10px 20px; border-radius:7px; cursor:pointer;
+    border:1px solid var(--border-brown); background:var(--row); color:var(--ink);
+  }
+  .btn:hover{ background:#d2c3a2; }
+  .btn.add{ background:transparent; }
+
+  @media print{
+    body{ background:#fff; padding:0; display:block; }
+    .back-row, .toolbar, table.lectable .rm{ display:none !important; }
+    .lecreport-card{ box-shadow:none; border-width:3px; max-width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="back-row"><button onclick="history.back()" title="Back">&larr;</button></div>
+
+  <div class="lecreport-card">
+    <div class="lec-brand">SkillsTrack</div>
+    <div class="lec-sub">Lecturer Report: Task Completion &amp; Percentage Scored</div>
+
+    <div class="lec-field-row">
+      <div><label>Lecturer Name: </label><input type="text" placeholder="________________"></div>
+      <div><label>Task: </label><input type="text" placeholder="________________"></div>
+    </div>
+    <div class="lec-field-row">
+      <div><label>Programme: </label><input type="text" placeholder="________________"></div>
+      <div><label>Date: </label><input type="date"></div>
+    </div>
+
+    <h5>1. Class Summary</h5>
+    <table class="lectable">
+      <thead>
+        <tr><th>Total Learners</th><th>Class Avg Completion %</th><th>Class Avg Score %</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" id="totalLearners" value="0" oninput="recalcSummary()"></td>
+          <td id="avgCompletion">0%</td>
+          <td id="avgScore">0%</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h5>2. Task Completion &amp; Score Breakdown</h5>
+    <p style="font-size:.85rem;color:#5c4a34;margin:0 0 8px;font-family:'Inter',sans-serif;">
+      Completion ✓ / Task Swapped / Coaching sent / confirm / No show / avg mark / score completed tasks
+    </p>
+    <table class="lectable" id="breakdownTable">
+      <thead>
+        <tr><th>Learner</th><th>Task Completed</th><th>Score %</th><th>Notes</th><th class="rm"></th></tr>
+      </thead>
+      <tbody id="breakdownBody">
+        <!-- rows injected -->
+      </tbody>
+    </table>
+    <div class="toolbar" style="justify-content:flex-start;margin-top:10px;">
+      <button class="btn add" onclick="addRow()">+ Add learner row</button>
+    </div>
+
+    <div class="lec-sign">
+      <div>Lecturer's Signature: <span class="line">&nbsp;</span><br><br>Date: <span class="line">&nbsp;</span></div>
+      <div>Received by: <span class="line">&nbsp;</span><br><br>Date: <span class="line">&nbsp;</span></div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn" onclick="window.print()">Print Report</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let rows = [
+  {learner:'', completed:'', score:'', notes:''},
+  {learner:'', completed:'', score:'', notes:''},
+  {learner:'', completed:'', score:'', notes:''},
+];
+
+function renderRows(){
+  const body = document.getElementById('breakdownBody');
+  body.innerHTML = rows.map((r,i)=>`
+    <tr>
+      <td><input type="text" value="${r.learner}" oninput="rows[${i}].learner=this.value"></td>
+      <td><input type="text" value="${r.completed}" oninput="rows[${i}].completed=this.value"></td>
+      <td><input type="number" value="${r.score}" oninput="rows[${i}].score=this.value; recalcSummary();"></td>
+      <td><input type="text" value="${r.notes}" oninput="rows[${i}].notes=this.value"></td>
+      <td class="rm"><button class="btn" style="padding:4px 9px;font-size:.7rem;" onclick="removeRow(${i})">×</button></td>
+    </tr>
+  `).join('');
+}
+
+function addRow(){
+  rows.push({learner:'', completed:'', score:'', notes:''});
+  renderRows();
+}
+function removeRow(i){
+  rows.splice(i,1);
+  renderRows();
+  recalcSummary();
+}
+
+function recalcSummary(){
+  const scores = rows.map(r=>parseFloat(r.score)).filter(n=>!isNaN(n));
+  const avgScore = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+  const completedCount = rows.filter(r=>r.completed && /y|done|✓|complete/i.test(r.completed)).length;
+  const totalLearners = parseFloat(document.getElementById('totalLearners').value) || rows.length;
+  const avgCompletion = totalLearners ? Math.round((completedCount/totalLearners)*100) : 0;
+  document.getElementById('avgScore').textContent = avgScore + '%';
+  document.getElementById('avgCompletion').textContent = avgCompletion + '%';
+}
+
+renderRows();
+recalcSummary();
+</script>
+</body>
+</html>

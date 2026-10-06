@@ -3,11 +3,345 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../styles.css" />
     <title>SkillsTrack — Tasks</title>
+    <style>
+      :root {
+        --bg-deep: #050f1d;
+        --bg-mid: #0a1a2d;
+        --panel: rgba(16, 28, 40, 0.76);
+        --panel-soft: rgba(22, 37, 52, 0.7);
+        --card: rgba(225, 228, 232, 0.8);
+        --card-deep: rgba(203, 210, 218, 0.75);
+        --text: #edf4ff;
+        --muted: rgba(237, 244, 255, 0.74);
+        --table: rgba(213, 214, 218, 0.52);
+        --table-dark: rgba(8, 18, 28, 0.6);
+        --action: rgba(255, 255, 255, 0.16);
+        --line: rgba(255, 255, 255, 0.14);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg-deep);
+        color: var(--text);
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 50% 22%, rgba(110, 143, 196, 0.2), transparent 25%),
+          radial-gradient(circle at 15% 20%, rgba(52, 94, 130, 0.2), transparent 20%),
+          radial-gradient(circle at 82% 35%, rgba(94, 75, 160, 0.18), transparent 22%),
+          url("../../public/images/background.png") center/cover no-repeat fixed;
+      }
+
+      .tasks-shell {
+        width: 100%;
+        min-height: 100vh;
+        padding: 18px 0 28px;
+      }
+
+      .tasks-header {
+        width: min(1230px, calc(100% - 42px));
+        height: 62px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        background: rgba(10, 24, 39, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        padding: 0 18px 0 16px;
+      }
+
+      .tasks-brand {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+      }
+
+      .tasks-brand img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+        display: block;
+      }
+
+      .tasks-nav {
+        flex: 1;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(22px, 2.8vw, 52px);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .tasks-nav a {
+        position: relative;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 13px;
+        line-height: 1;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
+      .tasks-nav a.active {
+        color: #ffffff;
+      }
+
+      .tasks-profile {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.82);
+        display: grid;
+        place-items: center;
+        color: #0d1c2a;
+        box-shadow: 0 10px 16px rgba(0,0,0,0.22);
+        padding: 0;
+      }
+
+      .tasks-profile svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .tasks-main {
+        width: min(940px, calc(100% - 120px));
+        margin: 18px auto 0;
+      }
+
+      .tasks-title {
+        margin: 0 0 26px;
+        text-align: center;
+        font-size: clamp(2.1rem, 3vw, 4rem);
+        line-height: 1.15;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        color: rgba(237, 244, 255, 0.95);
+      }
+
+      .tasks-stats {
+        display: flex;
+        justify-content: center;
+        gap: 34px;
+        margin: 0 auto;
+      }
+
+      .tasks-stat {
+        width: 124px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tasks-stat-circle {
+        width: 111px;
+        height: 111px;
+        border-radius: 50%;
+        background: rgba(220, 222, 226, 0.86);
+        display: grid;
+        place-items: center;
+        color: rgba(15, 26, 36, 0.9);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+      }
+
+      .tasks-stat-value {
+        font-size: 2rem;
+        line-height: 1;
+        font-weight: 700;
+      }
+
+      .tasks-stat-label {
+        margin-top: 8px;
+        font-size: 0.58rem;
+        line-height: 1.3;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(238, 244, 255, 0.75);
+        text-align: center;
+      }
+
+      .tasks-panel {
+        width: min(780px, 100%);
+        margin: 30px auto 0;
+        background: rgba(200, 205, 212, 0.24);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        padding: 14px 18px 18px;
+      }
+
+      .tasks-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 2px 0 12px;
+      }
+
+      .tasks-panel-title {
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(237, 244, 255, 0.8);
+        font-weight: 500;
+      }
+
+      .tasks-moods {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .tasks-mood {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(232, 234, 239, 0.9);
+        display: grid;
+        place-items: center;
+        color: rgba(33, 52, 70, 0.9);
+        font-size: 1.1rem;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+      }
+
+      .tasks-progress-box {
+        background: rgba(224, 225, 228, 0.66);
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.18);
+        padding: 10px 14px 12px;
+      }
+
+      .tasks-progress-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: 0.72rem;
+        color: rgba(22, 28, 36, 0.82);
+        margin-bottom: 8px;
+      }
+
+      .tasks-progress-name {
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: rgba(29, 40, 54, 0.9);
+      }
+
+      .tasks-progress-value {
+        font-size: 0.7rem;
+        opacity: 0.8;
+      }
+
+      .tasks-progress {
+        width: 100%;
+        height: 16px;
+        background: rgba(116, 121, 128, 0.38);
+        border-radius: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+
+      .tasks-progress > span {
+        display: block;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(66, 128, 72, 0.8), rgba(47, 81, 49, 0.82));
+      }
+
+      .tasks-table-wrap {
+        margin-top: 14px;
+        background: rgba(232, 234, 237, 0.38);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      thead th {
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 0.53rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(29, 42, 58, 0.8);
+        background: rgba(255,255,255,0.1);
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+      }
+
+      tbody td {
+        padding: 10px 10px;
+        font-size: 0.66rem;
+        color: rgba(30, 41, 55, 0.82);
+        background: rgba(238, 239, 241, 0.26);
+      }
+
+      tbody tr + tr td {
+        border-top: 1px solid rgba(0,0,0,0.06);
+      }
+
+      .tasks-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .tasks-button {
+        border: 1px solid rgba(255,255,255,0.28);
+        background: rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.9);
+        border-radius: 5px;
+        padding: 8px 18px;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      @media (max-width: 760px) {
+        .tasks-header {
+          width: calc(100% - 18px);
+          padding: 0 12px;
+        }
+
+        .tasks-nav {
+          gap: 14px;
+          overflow-x: auto;
+          justify-content: flex-start;
+          padding: 0 10px;
+        }
+
+        .tasks-main {
+          width: calc(100% - 26px);
+        }
+
+        .tasks-stats {
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="tasks-page">
+    <div class="tasks-shell">
       <header class="tasks-header">
         <div class="tasks-brand" aria-label="SkillsTrack logo">
           <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
@@ -30,79 +364,76 @@
       <main class="tasks-main">
         <h1 class="tasks-title">Welcome To TASKS</h1>
 
-        <section class="tasks-stats" aria-label="Task counts">
-          <div class="tasks-stat-card">
+        <section class="tasks-stats" aria-label="Task totals">
+          <div class="tasks-stat">
+            <div class="tasks-stat-circle"><span class="tasks-stat-value">0</span></div>
             <div class="tasks-stat-label">Total Tasks</div>
-            <div class="tasks-stat-value">0</div>
           </div>
-          <div class="tasks-stat-card">
+
+          <div class="tasks-stat">
+            <div class="tasks-stat-circle"><span class="tasks-stat-value">0</span></div>
             <div class="tasks-stat-label">Completed</div>
-            <div class="tasks-stat-value">0</div>
           </div>
-          <div class="tasks-stat-card">
+
+          <div class="tasks-stat">
+            <div class="tasks-stat-circle"><span class="tasks-stat-value">0</span></div>
             <div class="tasks-stat-label">Outstanding</div>
-            <div class="tasks-stat-value">0</div>
           </div>
-          <div class="tasks-stat-card">
+
+          <div class="tasks-stat">
+            <div class="tasks-stat-circle"><span class="tasks-stat-value">0</span></div>
             <div class="tasks-stat-label">Overdue</div>
-            <div class="tasks-stat-value">0</div>
           </div>
         </section>
 
-        <section class="tasks-panel" aria-label="Task overview panel">
-          <section class="tasks-status-row" aria-label="Task status row">
-            <div class="tasks-frame-status">
-              <span>Frame status</span>
-              <span class="status-name">[NAME OF TASKS]</span>
+        <section class="tasks-panel" aria-label="Learner progress panel">
+          <div class="tasks-panel-header">
+            <div class="tasks-panel-title">Learner progress</div>
+            <div class="tasks-moods" aria-label="status icons">
+              <div class="tasks-mood" aria-hidden="true">☹</div>
+              <div class="tasks-mood" aria-hidden="true">☺</div>
             </div>
-            <div class="tasks-progress-indicator" aria-hidden="true">
-              <div class="tasks-progress-bar"><span></span></div>
-            </div>
-            <div class="tasks-face-group" aria-hidden="true">
-              <div class="face face-sad"></div>
-              <div class="face face-happy"></div>
-            </div>
-          </section>
+          </div>
 
-          <section class="tasks-lower-panel" aria-label="Task table and actions">
-            <div class="tasks-table-wrap">
-              <table class="tasks-table">
-                <thead>
-                  <tr>
-                    <th>Tasks</th>
-                    <th>Due date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Task 1</td>
-                    <td>--</td>
-                    <td>Pending</td>
-                    <td><button type="button">Open</button></td>
-                  </tr>
-                  <tr>
-                    <td>Task 2</td>
-                    <td>--</td>
-                    <td>Pending</td>
-                    <td><button type="button">Open</button></td>
-                  </tr>
-                  <tr>
-                    <td>Task 3</td>
-                    <td>--</td>
-                    <td>Pending</td>
-                    <td><button type="button">Open</button></td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="tasks-progress-box">
+            <div class="tasks-progress-row">
+              <span class="tasks-progress-name">Frame status</span>
+              <span class="tasks-progress-value">[Name of tasks]</span>
             </div>
+            <div class="tasks-progress" aria-label="Progress bar">
+              <span></span>
+            </div>
+          </div>
 
-            <div class="tasks-footer-actions">
-              <button type="button" class="tasks-support-btn">BOOK SUPPORT</button>
-              <button type="button" class="tasks-print-btn">PRINT REPORT</button>
-            </div>
-          </section>
+          <div class="tasks-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Title</th>
+                  <th>Due date</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="tasks-actions">
+            <button type="button" class="tasks-button">Book Support</button>
+            <button type="button" class="tasks-button">Print Report</button>
+          </div>
         </section>
       </main>
     </div>
