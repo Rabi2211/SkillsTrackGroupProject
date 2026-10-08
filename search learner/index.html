@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Learner | SkillsTrack</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <button class="back-button" id="backButton" type="button" aria-label="Go back">&lt;</button>
+      <h1>Search Learner</h1>
+    </header>
+
+    <form class="search-form" id="searchForm">
+      <label for="learnerSearch">Search</label>
+      <input id="learnerSearch" type="search" placeholder="learner" autocomplete="off">
+    </form>
+
+    <section class="results-panel" aria-label="Learner search results">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Learner Name</th>
+            <th scope="col">Tasks</th>
+            <th scope="col">Progress</th>
+            <th scope="col">Bookings</th>
+            <th scope="col">Tasks Completed</th>
+          </tr>
+        </thead>
+        <tbody id="learnerRows"></tbody>
+      </table>
+      <p class="empty-state" id="emptyState">Search for a learner to view results.</p>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
