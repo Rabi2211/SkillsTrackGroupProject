@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url("../background.png") no-repeat center center/cover;
+    font-family: "Times New Roman", serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: white;
+}
+
+.container {
+    text-align: center;
+}
+
+.container h1 {
+    color: white;
+    font-size: 2rem;
+    font-weight: normal;
+    margin-bottom: 40px;
+}
+
+.card {
+    width: 520px;
+    max-width: 90%;
+    min-height: 330px;
+    background: rgba(230, 213, 67, 0.75);
+    border-radius: 30px;
+    padding: 80px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+.card label {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.card input {
+    width: 300px;
+    max-width: 100%;
+    padding: 12px;
+    border: none;
+    outline: none;
+    background: rgba(230, 230, 230, 0.9);
+    margin-bottom: 60px;
+}
+
+.card input::placeholder {
+    text-align: right;
+}
+
+.card button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #f1f1f1;
+    color: #333;
+    transition: 0.3s;
+}
+
+.card button:hover {
+    background: #ddd;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+}
+
+#message {
+    margin-top: 15px;
+    color: white;
+    min-height: 1.2em;
+}
