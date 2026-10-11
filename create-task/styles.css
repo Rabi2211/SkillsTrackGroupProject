@@ -1,0 +1,227 @@
+:root {
+  --page-bg: #414456;
+  --frame: #f3f3f3;
+  --panel-bg: #a58a70;
+  --field-bg: #c49b70;
+  --label: #fff;
+  --button-bg: #b9b9bd;
+  --button-text: #38383a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--page-bg);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.page-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  border: 5px solid var(--frame);
+  background: var(--page-bg);
+}
+
+.task-heading {
+  position: absolute;
+  top: 42px;
+  right: 20px;
+  left: 20px;
+  margin: 0;
+  color: var(--label);
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.task-form {
+  width: 100%;
+  padding-top: max(100px, 22.6vh);
+}
+
+.form-panel {
+  width: 900px;
+  height: 400px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  background: var(--panel-bg);
+}
+
+.field {
+  position: relative;
+  background: var(--field-bg);
+}
+
+.field label {
+  position: absolute;
+  z-index: 1;
+  top: 1px;
+  left: 2px;
+  color: var(--label);
+  font-size: 13px;
+  line-height: 16px;
+  pointer-events: none;
+}
+
+.field input,
+.field textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 19px 8px 6px;
+  border: 0;
+  border-radius: 0;
+  outline-color: rgba(50, 47, 42, 0.55);
+  background: transparent;
+  color: #272522;
+  font-size: 14px;
+  resize: none;
+}
+
+.field-title {
+  width: calc(100% - 18px);
+  height: 46px;
+}
+
+.middle-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 140px;
+  align-items: center;
+  gap: 24px;
+  height: 116px;
+  margin-top: 24px;
+}
+
+.field-description {
+  width: 100%;
+  height: 116px;
+}
+
+.field-other {
+  width: calc(100% - 18px);
+  height: 73px;
+  margin-top: 24px;
+}
+
+.date-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 0;
+  transform: none;
+  color: var(--label);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.calendar-control {
+  position: relative;
+  display: grid;
+  width: 24px;
+  height: 26px;
+  place-items: center;
+  color: #242424;
+}
+
+.calendar-control svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.calendar-control input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.submit-button {
+  display: block;
+  width: 151px;
+  height: 27px;
+  margin: 46px auto 0;
+  padding: 0;
+  border: 0;
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  filter: brightness(1.05);
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .task-form {
+    padding: 84px 16px 32px;
+  }
+
+  .form-panel {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+  }
+
+  .field-title,
+  .field-other {
+    width: 100%;
+  }
+
+  .middle-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    height: auto;
+    margin-top: 24px;
+  }
+
+  .field-description {
+    height: 116px;
+  }
+
+  .date-field {
+    justify-content: flex-end;
+    min-height: 38px;
+    padding-left: 0;
+    transform: none;
+  }
+
+  .field-other {
+    margin-top: 24px;
+  }
+
+  .submit-button {
+    margin-top: 30px;
+  }
+}

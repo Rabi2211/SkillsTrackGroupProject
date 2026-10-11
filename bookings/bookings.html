@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Support | SkillsTrack</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="booking-page">
+
+    <section class="booking-panel" aria-labelledby="booking-title">
+      <h1 id="booking-title" class="booking-title">Book a support session</h1>
+
+      <form id="bookingForm" class="booking-form">
+        <label class="field field-topic">
+          <span>Topic Of Booking:</span>
+          <input id="bookingTopic" name="topic" type="text" required>
+        </label>
+
+        <label class="date-field">
+          <span>Due Date:</span>
+          <input id="bookingDate" name="preferredDate" type="date" required>
+        </label>
+
+        <label class="field field-description">
+          <span>Topic Description:</span>
+          <textarea id="bookingDescription" name="description" rows="5" required></textarea>
+        </label>
+
+        <button type="submit">BOOK SESSION</button>
+        <p id="bookingMessage" class="booking-message" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

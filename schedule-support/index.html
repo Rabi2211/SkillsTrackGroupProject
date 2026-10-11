@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Support</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="support-panel" aria-label="Schedule support">
+
+        <h1>Schedule Support</h1>
+
+        <div class="table-wrap">
+          <div class="table-header row">
+            <div class="cell date">Date:</div>
+            <div class="cell time">Time:</div>
+            <div class="cell name">Name:</div>
+            <div class="cell action">Schedule</div>
+          </div>
+
+          <div class="table-row row">
+            <div class="cell date-cell">
+              <input class="date-input" type="date" aria-label="Select date" />
+            </div>
+            <div class="cell time-cell">
+              <input class="time-input" type="time" aria-label="Select time" />
+            </div>
+            <div class="cell learner-input-cell">
+              <input class="name-input" type="text" placeholder="Learner name" aria-label="Learner name" />
+            </div>
+            <div class="cell action-cell">
+              <button class="schedule-button" type="button" aria-label="Schedule learner support">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 2v2M17 2v2M4 8h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-row row alt-row">
+            <div class="cell date-cell">
+              <input class="date-input" type="date" aria-label="Select date" />
+            </div>
+            <div class="cell time-cell">
+              <input class="time-input" type="time" aria-label="Select time" />
+            </div>
+            <div class="cell learner-input-cell">
+              <input class="name-input" type="text" placeholder="Learner name" aria-label="Learner name" />
+            </div>
+            <div class="cell action-cell">
+              <button class="schedule-button" type="button" aria-label="Schedule learner support">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 2v2M17 2v2M4 8h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

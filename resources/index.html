@@ -1,44 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resources | SkillsTrack</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <main class="page-shell">
-    <nav class="top-bar" aria-label="Main navigation">
-      <a class="logo" href="../" aria-label="SkillsTrack home">
-        <span class="logo-ring logo-ring-one"></span>
-        <span class="logo-ring logo-ring-two"></span>
-        <span class="logo-ring logo-ring-three"></span>
-      </a>
-      <button class="menu-button" id="menuButton" type="button" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="menu" id="menu" hidden>
-        <a href="../">Dashboard</a>
-        <a href="../search%20learner/">Search learners</a>
-      </div>
-    </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resources</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <img class="brand-logo" src="../images/logo.png" alt="SkillsTrack logo" />
 
-    <button class="back-button" id="backButton" type="button" aria-label="Go back">&lt;</button>
-    <h1>Welcome To Resources</h1>
+        <button class="menu-button" type="button" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </header>
 
-    <section class="upload-area" aria-labelledby="uploadTitle">
-      <h2 id="uploadTitle">Upload PDF</h2>
-      <label class="file-picker" for="pdfFile">
-        <span class="file-icon" aria-hidden="true"></span>
-        <span class="sr-only">Choose a PDF file</span>
-      </label>
-      <input id="pdfFile" type="file" accept="application/pdf">
-      <p class="file-name" id="fileName">No file selected</p>
-    </section>
+      <main class="content">
+        <h1>Welcome To Resources</h1>
 
-    <button class="upload-button" id="uploadButton" type="button">UPLOAD</button>
-    <p class="status" id="status" role="status" aria-live="polite"></p>
-  </main>
-  <script src="script.js"></script>
-</body>
+        <div class="upload-panel">
+          <div class="upload-box">
+            <div class="upload-title">Upload PDF</div>
+            <div class="upload-icon" aria-label="Upload file">
+              <span></span>
+            </div>
+          </div>
+
+          <button class="upload-button" type="button">UPLOAD</button>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
 </html>

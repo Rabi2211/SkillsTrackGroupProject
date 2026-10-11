@@ -1,0 +1,143 @@
+:root {
+  --page-bg: #02080f;
+  --panel-bg: #1a2942;
+  --panel-edge: #f1f1f1;
+  --gold: #d9a368;
+  --gold-soft: #d9b27d;
+  --ink: #f7f3eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: Georgia, 'Times New Roman', serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.portal-panel {
+  width: min(100%, 1600px);
+  height: min(100vh, 900px);
+  margin: 0;
+  background: rgba(22, 34, 52, 0.96);
+  border: 4px solid var(--panel-edge);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 60px;
+  position: relative;
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(38px, 3.5vw, 66px);
+  font-weight: 400;
+  font-style: 
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  color: var(--gold);
+  text-align: center;
+}
+
+.intro {
+  margin-top: 48px;
+  text-align: center;
+  color: #f2e8d6;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(28px, 2.2vw, 42px);
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.intro p {
+  margin: 0 0 8px;
+  display: block;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.emphasis {
+  display: inline-block;
+  color: var(--gold);
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.emphasis::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background: rgba(217, 163, 104, 0.8);
+  border-radius: 2px;
+}
+
+.signup {
+  font-size: 0.72em;
+}
+
+.login {
+  font-size: 0.9em;
+}
+
+.brand-mark {
+  width: 220px;
+  height: 220px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.brand-mark img {
+  width: 50%;
+  height: 50%;
+}
+
+@media (max-width: 768px) {
+  .portal-panel {
+    padding-top: 40px;
+  }
+
+  .intro {
+    margin-top: 30px;
+  }
+
+  .intro p {
+    white-space: normal;
+    padding: 0 22px;
+  }
+}
