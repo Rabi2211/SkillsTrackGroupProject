@@ -24,9 +24,18 @@
 
       <nav class="menu-card" aria-label="Profile menu">
         <a href="../profile/index.html">Edit profile</a>
+        <button type="button" class="scheduled-sessions-button">Scheduled Sessions</button>
         <button type="button">Settings</button>
         <button type="button">Sign out</button>
       </nav>
+
+      <div id="scheduledSessionsModal" class="scheduled-modal" hidden>
+        <div class="scheduled-modal-content">
+          <button type="button" class="scheduled-modal-close" aria-label="Close scheduled sessions">Close</button>
+          <h2>Scheduled Sessions</h2>
+          <ul id="scheduledSessionsList"></ul>
+        </div>
+      </div>
     </main>
     <script type="module" src="learnerProfile.js"></script>
   </body>

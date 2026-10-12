@@ -431,11 +431,117 @@
           </div>
 
           <div class="tasks-actions">
-            <button type="button" class="tasks-button">Book Support</button>
+            <button type="button" class="tasks-button" onclick="window.location.href='../../Nyiko/book-session/studentBookings.html'">Book Support</button>
             <button type="button" class="tasks-button" onclick="window.location.href='learnerReport.html'">Print Report</button>
           </div>
         </section>
       </main>
     </div>
+    <script type="module">
+      import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+      import { db } from "../../firebase.js";
+
+      const tableBody = document.querySelector("tbody");
+      const statValues = document.querySelectorAll(".tasks-stat-value");
+
+      function updateTaskStats(tasks) {
+        if (!statValues.length) return;
+
+        const now = new Date();
+        const totalTasks = tasks.length;
+        const completedTasks = tasks.filter((task) => (task.status || "Pending").toLowerCase() === "complete").length;
+        const outstandingTasks = tasks.filter((task) => (task.status || "Pending").toLowerCase() !== "complete").length;
+        const overdueTasks = tasks.filter((task) => {
+          const status = (task.status || "Pending").toLowerCase();
+          if (!task.dueDate || status === "complete") return false;
+
+          const dueDate = new Date(task.dueDate);
+          if (Number.isNaN(dueDate.getTime())) return false;
+
+          return dueDate < now;
+        }).length;
+
+        const values = [totalTasks, completedTasks, outstandingTasks, overdueTasks];
+
+        statValues.forEach((element, index) => {
+          element.textContent = String(values[index] ?? 0);
+        });
+      }
+
+      tableBody.addEventListener("click", async (event) => {
+        const button = event.target.closest(".complete-task-btn");
+        if (!button) return;
+
+        const taskId = button.dataset.taskId;
+        if (!taskId) return;
+
+        if (button.dataset.completed === "true") {
+          return;
+        }
+
+        try {
+          button.disabled = true;
+          button.dataset.completed = "true";
+          button.textContent = "Completed";
+
+          await updateDoc(doc(db, "tasks", taskId), {
+            status: "complete"
+          });
+
+          window.location.href = "../../game/game.html";
+        } catch (error) {
+          console.error("Failed to complete task:", error);
+          button.disabled = false;
+          button.dataset.completed = "false";
+          button.textContent = "Mark task as complete";
+        }
+      });
+
+      async function loadTasks() {
+        if (!tableBody) return;
+
+        try {
+          const snapshot = await getDocs(collection(db, "tasks"));
+          const tasks = snapshot.docs
+            .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+            .filter((task) => task.title);
+
+          updateTaskStats(tasks);
+
+          if (!tasks.length) {
+            tableBody.innerHTML = '<tr><td colspan="6">No tasks available.</td></tr>';
+            return;
+          }
+
+          tableBody.innerHTML = tasks.map((task) => {
+            const isCompleted = (task.status || "Pending").toLowerCase() === "complete";
+
+            return `
+              <tr>
+                <td>${task.id.slice(0, 6)}</td>
+                <td>${task.title || "Untitled task"}</td>
+                <td>${task.dueDate || "Not set"}</td>
+                <td>${task.priority || "Normal"}</td>
+                <td>${task.status || "Pending"}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="complete-task-btn"
+                    data-task-id="${task.id}"
+                    data-completed="${isCompleted}"
+                    ${isCompleted ? "disabled" : ""}
+                  >${isCompleted ? "Completed" : "Mark task as complete"}</button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        } catch (error) {
+          console.error("Failed to load tasks:", error);
+          tableBody.innerHTML = '<tr><td colspan="6">Unable to load tasks.</td></tr>';
+        }
+      }
+
+      loadTasks();
+    </script>
   </body>
 </html>

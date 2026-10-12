@@ -124,35 +124,44 @@ textarea {
   pointer-events: none;
 }
 
-.date-field {
+.booking-datetime-row {
+  position: absolute;
   top: 143px;
-  right: 93px;
+  left: 57px;
   display: flex;
-  width: max-content;
-  height: 20px;
-  align-items: center;
-  gap: 8px;
+  width: min(373px, calc(100% - 114px));
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.date-field {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
   color: rgba(255, 255, 255, 0.9);
 }
 
+.date-field span {
+  color: var(--ink);
+  font-size: 0.5rem;
+}
+
 .date-field input {
-  width: 26px;
-  height: 18px;
-  padding: 0 2px;
+  width: 100%;
+  height: 30px;
+  padding: 6px 8px;
   border: 0;
   border-radius: 0;
   background: var(--input);
   color: var(--ink);
-  font-size: 0.6rem;
-}
-
-.date-field input::-webkit-datetime-edit {
-  display: none;
+  font-size: 0.7rem;
 }
 
 .date-field input::-webkit-calendar-picker-indicator {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   margin: 0 auto;
   padding: 0;
 }

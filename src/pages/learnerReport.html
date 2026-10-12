@@ -297,15 +297,15 @@
             <div class="field-row">
               <div class="field">
                 <label>Learner Name</label>
-                <input type="text" value="" />
+                <input type="text" value="" id="learnerNameField" />
               </div>
               <div class="field">
                 <label>Course/Programme</label>
-                <input type="text" value="" />
+                <input type="text" value="" id="programmeField" />
               </div>
               <div class="field">
                 <label>Report Date</label>
-                <input type="text" value="" />
+                <input type="text" value="" id="reportDateField" />
               </div>
             </div>
           </div>
@@ -401,5 +401,120 @@
         </div>
       </main>
     </div>
+
+    <script type="module">
+      import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+      import { auth, db } from "../../firebase.js";
+
+      const learnerNameField = document.getElementById("learnerNameField");
+      const programmeField = document.getElementById("programmeField");
+      const reportDateField = document.getElementById("reportDateField");
+      const gameTableBody = document.querySelectorAll("table")[0].querySelector("tbody");
+      const taskTableBody = document.querySelectorAll("table")[1].querySelector("tbody");
+      const gameAverageCell = document.querySelectorAll("table")[0].querySelector("tfoot td:last-child");
+      const taskAverageCell = document.querySelectorAll("table")[1].querySelector("tfoot td:last-child");
+
+      function getStoredUser() {
+        try {
+          return JSON.parse(localStorage.getItem("skillsTrackCurrentUser") || "{}");
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function formatDate(value) {
+        if (!value) return "";
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+
+        return date.toISOString().slice(0, 10);
+      }
+
+      function normalizeStatus(status) {
+        const value = (status || "Pending").toString().trim().toLowerCase();
+        if (["complete", "completed", "done"].includes(value)) return "Complete";
+        if (["in progress", "in-progress", "progressing"].includes(value)) return "In Progress";
+        return "Pending";
+      }
+
+      function buildTableRow(rowData) {
+        return rowData.map((cell) => `<td>${cell}</td>`).join("");
+      }
+
+      async function loadLearnerReport() {
+        const storedUser = getStoredUser();
+        const user = auth.currentUser || (storedUser.uid ? { uid: storedUser.uid, email: storedUser.email } : null);
+
+        if (!user || !user.uid) {
+          return;
+        }
+
+        const learnerDoc = await getDoc(doc(db, "students", user.uid));
+        const learner = learnerDoc.exists() ? learnerDoc.data() : {};
+        const fullName = learner.fullName || `${learner.firstName || ""} ${learner.lastName || ""}`.trim() || storedUser.fullName || user.email || "Learner";
+        const programme = learner.programme || "N/A";
+
+        learnerNameField.value = fullName;
+        programmeField.value = programme;
+        reportDateField.value = new Date().toISOString().slice(0, 10);
+
+        const gameResults = [];
+        const gameSnapshot = await getDocs(query(collection(db, "gameResults"), where("learnerUid", "==", user.uid)));
+        gameSnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          gameResults.push({
+            score: Number(data.score) || 0,
+            completedAt: data.completedAt || data.createdAt || null,
+            level: Number(data.level) || 0,
+          });
+        });
+
+        gameResults.sort((a, b) => {
+          const aTime = a.completedAt?.seconds ? a.completedAt.seconds * 1000 : new Date(a.completedAt || 0).getTime();
+          const bTime = b.completedAt?.seconds ? b.completedAt.seconds * 1000 : new Date(b.completedAt || 0).getTime();
+          return aTime - bTime;
+        });
+
+        const gameRows = gameResults.length
+          ? gameResults.map((result, index) => {
+              const dateText = formatDate(result.completedAt?.toDate ? result.completedAt.toDate() : result.completedAt);
+              return buildTableRow([String(index + 1), "Memory Challenge", dateText || "N/A", `${result.score}`, result.level > 0 ? "Completed" : "Pending"]);
+            })
+          : [buildTableRow(["1", "Memory Challenge", "N/A", "0", "Not played"])];
+
+        gameTableBody.innerHTML = gameRows.join("");
+
+        const averageGameScore = gameResults.length
+          ? Math.round(gameResults.reduce((sum, item) => sum + item.score, 0) / gameResults.length)
+          : 0;
+        gameAverageCell.textContent = `${averageGameScore} %`;
+
+        const taskSnapshot = await getDocs(collection(db, "tasks"));
+        const learnerTasks = taskSnapshot.docs
+          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+          .filter((task) => {
+            const assignedTo = Array.isArray(task.assignedTo) ? task.assignedTo : [];
+            const taskLearnerId = task.learnerUid || task.studentId || task.userId || "";
+            return assignedTo.includes(user.uid) || taskLearnerId === user.uid;
+          });
+
+        const taskRows = learnerTasks.length
+          ? learnerTasks.map((task, index) => {
+              const progress = Number(task.completionPercent ?? (normalizeStatus(task.status) === "Complete" ? 100 : 0)) || 0;
+              return buildTableRow([String(index + 1), task.title || "Untitled task", normalizeStatus(task.status), `${progress}%`]);
+            })
+          : [buildTableRow(["1", "No tasks assigned", "Pending", "0%"])] ;
+
+        taskTableBody.innerHTML = taskRows.join("");
+
+        const averageTaskProgress = learnerTasks.length
+          ? Math.round(learnerTasks.reduce((sum, task) => sum + (Number(task.completionPercent ?? (normalizeStatus(task.status) === "Complete" ? 100 : 0)) || 0), 0) / learnerTasks.length)
+          : 0;
+        taskAverageCell.textContent = `${averageTaskProgress} %`;
+      }
+
+      loadLearnerReport();
+    </script>
   </body>
 </html>

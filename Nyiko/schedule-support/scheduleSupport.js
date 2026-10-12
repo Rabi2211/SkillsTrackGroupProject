@@ -1,30 +1,90 @@
 
 import '../../firebase.js';
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+} from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
+import { db } from '../../firebase.js';
 
-const scheduleButtons = document.querySelectorAll('.schedule-button');
+const scheduleRows = document.querySelector('#scheduleRows');
 
-scheduleButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    const row = button.closest('.table-row');
-    const dateInput = row.querySelector('.date-input');
-    const timeInput = row.querySelector('.time-input');
-    const nameInput = row.querySelector('.name-input');
+function getBookingName(booking) {
+  const learnerName = booking.learnerName || booking.firstName || booking.fullName || booking.studentName || 'Learner';
+  const learnerSurname = booking.learnerSurname || booking.lastName || '';
+  return `${learnerName} ${learnerSurname}`.trim();
+}
 
-    const name = nameInput.value.trim();
-    if (!/^\p{L}+(?:\s+\p{L}+)*$/u.test(name)) {
-      nameInput.setCustomValidity('Enter a learner name using letters only.');
-      nameInput.reportValidity();
+function isPendingBooking(booking) {
+  const status = (booking.status || '').toString().trim().toLowerCase();
+  return status === '' || status === 'pending';
+}
+
+async function loadBookings() {
+  if (!scheduleRows) return;
+
+  try {
+    const snapshot = await getDocs(collection(db, 'bookings'));
+    const pendingBookings = snapshot.docs
+      .map((bookingDoc) => ({ id: bookingDoc.id, ...bookingDoc.data() }))
+      .filter(isPendingBooking);
+
+    if (!pendingBookings.length) {
+      scheduleRows.innerHTML = '<div class="table-row row"><div class="cell">No pending sessions.</div></div>';
       return;
     }
 
-    nameInput.setCustomValidity('');
-    const date = dateInput.value || 'Not set';
-    const time = timeInput.value || 'Not set';
+    scheduleRows.innerHTML = pendingBookings.map((booking) => {
+      const learnerDisplayName = getBookingName(booking);
+      const dateValue = booking.preferredDate || booking.scheduledDate || 'Not set';
+      const timeValue = booking.preferredTime || booking.bookingTime || booking.scheduledTime || 'Not set';
+      const topicValue = booking.topic || 'Support session';
 
-    button.classList.add('scheduled');
-    button.innerHTML = '<span class="checkmark">✓</span>';
-    button.title = `Scheduled: ${name} on ${date} at ${time}`;
-    button.disabled = true;
-    button.setAttribute('aria-label', `Scheduled support for ${name}`);
-  });
-});
+      return `
+        <div class="table-row row">
+          <div class="cell date-cell">${dateValue}</div>
+          <div class="cell time-cell">${timeValue}</div>
+          <div class="cell learner-input-cell">${learnerDisplayName}</div>
+          <div class="cell action-cell">
+            <div class="booking-topic">${topicValue}</div>
+            <label>
+              <input type="checkbox" class="schedule-checkbox" data-id="${booking.id}" />
+            </label>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    scheduleRows.querySelectorAll('.schedule-checkbox').forEach((checkbox) => {
+      checkbox.addEventListener('change', async (event) => {
+        if (!event.target.checked) return;
+
+        const id = event.target.dataset.id;
+        const booking = pendingBookings.find((item) => item.id === id);
+        if (!booking) return;
+
+        const bookingRef = doc(db, 'bookings', id);
+
+        await updateDoc(bookingRef, {
+          status: 'scheduled',
+          scheduledDate: booking.preferredDate || booking.scheduledDate || '',
+          scheduledTime: booking.preferredTime || booking.bookingTime || booking.scheduledTime || 'Not set',
+          scheduledAt: serverTimestamp(),
+          scheduledBy: 'lecturer',
+        });
+
+        event.target.disabled = true;
+        event.target.closest('.table-row').querySelector('.booking-topic').textContent = 'Scheduled';
+        loadBookings();
+      });
+    });
+  } catch (error) {
+    console.error('Failed to load bookings:', error);
+    scheduleRows.innerHTML = '<div class="table-row row"><div class="cell">Unable to load sessions.</div></div>';
+  }
+}
+
+loadBookings();

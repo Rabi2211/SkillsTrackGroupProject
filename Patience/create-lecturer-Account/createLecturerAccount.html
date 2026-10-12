@@ -25,6 +25,17 @@
             </div>
 
             <div class="input-group">
+                <label for="gender">Gender</label>
+                <select id="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Other</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+            </div>
+
+            <div class="input-group">
                 <label for="password">
                     Password
                     <small>(Must contain one special character)</small>
@@ -45,6 +56,6 @@
         </form>
     </div>
 
-    <script src="createLecturerAccount.js"></script>
+    <script type="module" src="createLecturerAccount.js"></script>
 </body>
 </html>

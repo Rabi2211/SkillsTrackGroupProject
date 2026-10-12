@@ -1,6 +1,8 @@
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getApp, getApps, initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOlAjhagBeoZBJ-2GDlkL6c_AKpoy9m_s",
@@ -12,5 +14,19 @@ const firebaseConfig = {
   measurementId: "G-FPNEK0CJP2"
 };
 
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+if (!globalThis.__SKILLSTRACK_FIREBASE__) {
+  globalThis.__SKILLSTRACK_FIREBASE__ = { app, db, auth, storage };
+}
+
+globalThis.app = app;
+globalThis.db = db;
+globalThis.auth = auth;
+globalThis.storage = storage;
+
+export { app, db, auth, storage };
+export default app;
