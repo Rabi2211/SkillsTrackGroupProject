@@ -1,0 +1,195 @@
+Fundamental Month 2 – Answers
+
+1. Firebase Data Model (6 Marks)
+
+Firebase keeps each user’s data separate by assigning every authenticated user a unique user ID (UID). Each user’s records are stored under a path such as: users/userId/tasks/taskId.
+
+When a user logs in, the app retrieves only the data linked to that user’s UID. This means User A can access only User A’s records, while User B can access only User B’s records. This prevents one user’s tasks from being mixed with another user’s tasks.
+
+Document ownership is maintained because every document belongs to a specific user. The UID acts as a unique identifier and helps keep records secure and organised.
+
+2. Client-Side Validation vs Authentication (6 Marks)
+
+Client-side validation checks whether the data entered by the user is valid before it is sent to the server. For example, checking whether a task title is empty before saving a task.
+
+Authentication verifies the identity of the user and confirms whether they are allowed to access the application. For example, a user signs in using Firebase Authentication with an email and password.
+
+Validation checks the data, while authentication checks the user.
+
+3. REST Methods (8 Marks)
+
+POST
+- Used to create new data.
+- Example: creating a new task in Firebase.
+
+GET
+- Used to retrieve data.
+- Example: loading all tasks for the logged-in user.
+
+PUT or PATCH
+- Used to update existing data.
+- Example: marking a task as completed.
+- PUT updates the entire record.
+- PATCH updates only specific fields.
+
+DELETE
+- Used to remove data.
+- Example: deleting a task from the task list.
+
+4. Try, Catch, Finally and Throw (8 Marks)
+
+- try contains code that may cause an error.
+- throw creates a custom error when a problem is detected.
+- catch handles the error and prevents the application from crashing.
+- finally runs after try or catch, regardless of the outcome.
+
+If a Firebase or REST request fails, the error is detected in the try block. A custom error can be created using throw. The catch block then displays or logs the error message. The finally block runs at the end to perform clean-up tasks, such as hiding a loading spinner.
+
+5. Debugging a Progress Error (8 Marks)
+
+To debug a progress error:
+1. Reproduce the issue and confirm that the progress is showing 150% instead of 75%.
+2. Open the browser developer tools.
+3. Use console.log() statements to track the values being calculated.
+4. Check how data moves from Firebase to the calculation function.
+5. Inspect variables to find where the incorrect value is introduced.
+6. Verify the formula used to calculate the percentage.
+7. Correct the logic error in the code.
+8. Test the application again to confirm the correct value of 75% is displayed.
+
+6. Pull Requests and Peer Reviews (6 Marks)
+
+A pull request records the code changes made by a developer before those changes are merged into the main project. This creates a clear record of each person’s contribution.
+
+A peer review allows team members to inspect the code and provide feedback. This helps detect bugs, improve code quality, enforce coding standards, and share knowledge among the group.
+
+Together, pull requests and peer reviews improve accountability and result in better-quality software.
+
+7. Firebase Security and Access Control
+
+a. Why use the authenticated user’s ID in the document path? (2 Marks)
+
+Using the authenticated user’s UID ensures that each user’s data is stored separately. It allows the application to retrieve the correct records for the correct user.
+
+b. How can Firebase Security Rules restrict access? (3 Marks)
+
+Firebase Security Rules can compare the logged-in user’s UID with the UID in the document path. Access is only granted when the two IDs match, which prevents users from viewing or editing one another’s data.
+
+c. One risk of unrestricted access (1 Mark)
+
+Users could read, modify, or delete other users’ data.
+
+d. Why is validation still needed? (2 Marks)
+
+Security Rules control access, but they do not guarantee that the data is valid. Validation ensures required fields are completed and that the data is in the correct format before saving.
+
+8. Error Handling Code
+
+a. Purpose of async (1 Mark)
+
+The async keyword allows a function to use await and handle asynchronous operations.
+
+b. Purpose of await (1 Mark)
+
+await pauses execution until a Promise has resolved and returned a result.
+
+c. Why throw a custom error when there is no title? (2 Marks)
+
+The title is required. Throwing an error prevents invalid task data from being sent to the server and informs the user that the input is invalid.
+
+d. Incorrect message in catch block (2 Marks)
+
+The message:
+
+console.log("Task saved successfully.");
+
+is incorrect because the catch block runs only when an error occurs. It wrongly suggests that the operation succeeded when the task was not saved.
+
+e. Correct catch block (2 Marks)
+
+catch (error) {
+    console.error("Error saving task:", error.message);
+}
+
+f. When does finally execute? (2 Marks)
+
+The finally block executes every time the function finishes, whether the request succeeds, fails, or throws an error.
+
+9. DOM Manipulation (8 Marks)
+
+JavaScript can create a new list item using:
+
+document.createElement("li");
+
+The text inside the item can be set using:
+
+li.textContent = "Complete assignment";
+
+The list element can be selected using:
+
+document.getElementById("taskList");
+
+The item can then be added to the list using:
+
+taskList.appendChild(li);
+
+To remove the item later:
+
+li.remove();
+
+Important DOM methods and properties include:
+- createElement()
+- textContent
+- getElementById()
+- appendChild()
+- remove()
+
+10. Object-Oriented JavaScript
+
+a. Purpose of the Task class (2 Marks)
+
+The Task class is a blueprint used to create task objects with the same properties and methods.
+
+b. What does the constructor do? (2 Marks)
+
+The constructor initialises a new object and assigns values to its properties when the object is created.
+
+c. Three properties created (2 Marks)
+- title
+- dueDate
+- completed
+
+d. What happens when markComplete() is called? (1 Mark)
+
+The completed property changes from false to true.
+
+e. Create a new Task object (1 Mark)
+
+const task1 = new Task("Study JavaScript", "2026-12-01");
+
+11. JavaScript Timers (6 Marks)
+
+setTimeout() runs code once after a specified delay.
+
+Example: displaying a notification after 5 seconds.
+
+setInterval() runs code repeatedly at set intervals.
+
+Example: updating a clock every second.
+
+When implementing animation or multimedia, developers should consider performance and avoid creating timers that slow down the application or use too much CPU power.
+
+12. Complete Asynchronous Workflow (8 Marks)
+
+1. The user clicks the Submit button.
+2. Client-side validation checks that all required fields are completed.
+3. A loading message or spinner is displayed.
+4. The application sends a request to Firebase to create the new record.
+5. Firebase processes the request and returns a response.
+6. The application retrieves the saved record from the database.
+7. The DOM is updated by creating and displaying the new task on the page.
+8. The loading indicator is removed.
+9. If an error occurs, the catch block displays an appropriate error message.
+10. If the request succeeds, the user sees the new record in the interface.
+
+This workflow ensures the data is validated, stored correctly, retrieved successfully, and displayed to the user while also handling errors and providing feedback.

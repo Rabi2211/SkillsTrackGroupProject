@@ -1,17 +1,29 @@
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+const form = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const closeButton = document.querySelector(".close-btn");
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+if (form && usernameInput && passwordInput) {
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    if(username === "" || password === ""){
-        alert("Please fill in all fields.");
-        return;
-    }
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
 
-    alert("Login successful!");
-});
+        if (username === "" || password === "") {
+            alert("Please fill in all fields.");
+            return;
+        }
 
-document.querySelector(".close-btn").addEventListener("click", () => {
-    window.close();
-});
+        alert("Login successful!");
+    });
+}
+
+if (closeButton) {
+    closeButton.addEventListener("click", () => {
+        const overlay = document.querySelector(".overlay");
+        if (overlay) {
+            overlay.style.display = "none";
+        }
+    });
+}

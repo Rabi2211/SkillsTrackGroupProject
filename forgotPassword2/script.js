@@ -1,25 +1,33 @@
 const verifyBtn = document.getElementById("verifyBtn");
 const message = document.getElementById("message");
+const emailInput = document.getElementById("email");
+const closeButton = document.querySelector(".close-btn");
 
-verifyBtn.addEventListener("click", () => {
-    const email = document.getElementById("email").value.trim();
+if (verifyBtn && emailInput && message) {
+    verifyBtn.addEventListener("click", () => {
+        const email = emailInput.value.trim();
 
-    if (email === "") {
-        message.textContent = "Please enter an email address.";
-        return;
-    }
+        if (email === "") {
+            message.textContent = "Please enter an email address.";
+            return;
+        }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailPattern.test(email)) {
-        message.textContent = "Invalid email address.";
-        return;
-    }
+        if (!emailPattern.test(email)) {
+            message.textContent = "Invalid email address.";
+            return;
+        }
 
-    message.textContent = "Verification email sent successfully.";
-});
+        message.textContent = "Verification email sent successfully.";
+    });
+}
 
-document.querySelector(".close-btn").addEventListener("click", () => {
-    window.close();
-});
-    
+if (closeButton) {
+    closeButton.addEventListener("click", () => {
+        const container = document.querySelector(".container");
+        if (container) {
+            container.style.display = "none";
+        }
+    });
+}
