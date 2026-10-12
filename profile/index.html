@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="profile-page">
+      <section class="profile-header" aria-label="Profile details">
+        <div class="avatar" aria-hidden="true">
+          <span class="avatar-head"></span>
+          <span class="avatar-shoulders"></span>
+        </div>
+
+        <div class="identity">
+          <p>[Name and Surname]</p>
+          <p>[Username(email)]</p>
+        </div>
+      </section>
+
+      <section class="edit-card" aria-labelledby="edit-title">
+        <h2 id="edit-title">Edit Profile</h2>
+
+        <div class="field-grid">
+          <div class="field-row">
+            <label class="field-label" for="nameInput">Edit Password</label>
+            <input id="nameInput" type="text" aria-label="Name and Surname" />
+          </div>
+
+          <div class="field-row">
+            <label class="field-label" for="emailInput">Edit Email</label>
+            <input id="emailInput" type="email" aria-label="Username email" />
+          </div>
+        </div>
+
+        <button class="update-button" type="button">Update Profile</button>
+      </section>
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+:root{
+  --bg: #f5f0eb;
+  --panel: #3a475b;
+  --header: #8a6a4d;
+  --row: #b08f6d;
+  --row-alt: #b28d66;
+  --text: #f3f3f3;
+  --button: #2f3743;
+  --line: rgba(255, 255, 255, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  min-height: 50px;
+  background: url("../images/background.png") center / cover no-repeat fixed;
+  color: var(--text);
+}
+
+button {
+  font: inherit;
+}
+
+.page-shell {
+  min-height:80h;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.support-panel {
+  position: relative;
+  width: min(100%, 1000px);
+  min-height: 100vh;
+  background: rgba(35, 53, 76, 0.9);
+  padding: 38px 36px 20px 36px;
+}
+
+.back-button {
+  position: absolute;
+  left: 26px;
+  top: 18px;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  font-size: 52px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}
+
+h1 {
+  margin: 0;
+  padding-top: 18px;
+  text-align: center;
+  color: var(--text);
+  font-size: clamp(28px, 2.4vw, 48px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.table-wrap {
+  width: min(900px, calc(100% - 60px));
+  margin: 52px auto 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2.1fr 2.1fr 2.1fr 1fr;
+  align-items: stretch;
+}
+
+.table-header {
+  background: var(--header);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.table-header .cell {
+  padding: 18px 20px;
+  font-size: clamp(18px, 1.7vw, 28px);
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+}
+
+.table-row {
+  min-height: 120px;
+  background: var(--row);
+}
+
+.table-row.alt-row {
+  background: var(--row-alt);
+}
+
+.cell {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty {
+  background: transparent;
+}
+
+.learner-input-cell {
+  justify-content: flex-start;
+  padding: 0 18px;
+}
+
+.learner-input-cell input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--text);
+  font-size: clamp(20px, 1.8vw, 30px);
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.learner-input-cell input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.action-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 0;
+}
+
+.action-cell button {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 2px solid rgba(34, 39, 44, 0.9);
+  background: transparent;
+  border-radius: 8px;
+  color: #1d2430;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.action-cell svg {
+  width: 30px;
+  height: 30px;
+}
+
+@media (max-width: 760px) {
+  .support-panel {
+    padding: 28px 18px 20px;
+  }
+
+  .back-button {
+    left: 18px;
+    top: 10px;
+    font-size: 38px;
+  }
+
+  .table-wrap {
+    width: calc(100% - 12px);
+    margin-top: 36px;
+  }
+
+  .row {
+    grid-template-columns: 1.8fr 1.8fr 0.8fr;
+  }
+
+  .table-header .cell,
+  .date-label {
+    font-size: 16px;
+  }
+
+  .date-label {
+    padding-left: 12px;
+    padding-right: 10px;
+  }
+
+  .action-cell button {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+.date-cell,
+.time-cell,
+.learner-input-cell {
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.date-input,
+.time-input,
+.name-input {
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-size: clamp(18px, 1.7vw, 24px);
+  padding: 0 12px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.date-input::-webkit-calendar-picker-indicator,
+.time-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.name-input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.schedule-button {
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.schedule-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.schedule-button.scheduled {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(34, 39, 44, 1);
+}
+
+.schedule-button.scheduled .checkmark {
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 700;
+}
