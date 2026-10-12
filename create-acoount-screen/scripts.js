@@ -1,12 +1,16 @@
 const form = document.getElementById("accountForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const message = document.getElementById("message");
 
-if (form) {
+if (form && usernameInput && passwordInput && confirmPasswordInput && message) {
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
     const specialCharacter = /[!@#$%^&*(),.?":{}|<>]/;
 
     if (username === "") {
@@ -35,16 +39,21 @@ if (form) {
 
 function showError(text) {
     const message = document.getElementById("message");
+    if (!message) return;
     message.className = "error";
     message.textContent = text;
 }
 
 function showSuccess(text) {
     const message = document.getElementById("message");
+    if (!message) return;
     message.className = "success";
     message.textContent = text;
 }
 
 function closeForm() {
-    document.querySelector(".container").style.display = "none";
+    const container = document.querySelector(".container");
+    if (container) {
+        container.style.display = "none";
+    }
 }
