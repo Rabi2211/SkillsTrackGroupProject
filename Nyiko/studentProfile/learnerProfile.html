@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Menu Alternative</title>
+    <link rel="stylesheet" href="learnerProfile.css" />
+  </head>
+  <body>
+    <main class="profile-page">
+      <button class="close-button" type="button" aria-label="Close profile">X</button>
+
+      <section class="profile-header" aria-label="Profile details">
+        <div class="avatar" aria-hidden="true">
+          <span class="avatar-head"></span>
+          <span class="avatar-shoulders"></span>
+        </div>
+
+        <div class="identity">
+          <p>[Name and Surname]</p>
+          <p>[Username(email)]</p>
+        </div>
+      </section>
+
+      <nav class="menu-card" aria-label="Profile menu">
+        <a href="../profile/index.html">Edit profile</a>
+        <button type="button">Settings</button>
+        <button type="button">Sign out</button>
+      </nav>
+    </main>
+    <script type="module" src="learnerProfile.js"></script>
+  </body>
+</html>
