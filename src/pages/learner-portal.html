@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillsTrack — Learner Portal</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="portal-shell">
+      <header class="portal-header">
+        <a class="portal-brand" href="learner-portal.html" aria-label="Back to dashboard">
+          <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
+        </a>
+
+        <button class="portal-profile" aria-label="Open profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z" />
+          </svg>
+        </button>
+      </header>
+
+      <nav class="portal-nav" aria-label="Main navigation">
+        <a href="learner-portal.html">Dashboard</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="#">Bookings</a>
+        <a href="resources.html">Resources</a>
+      </nav>
+
+      <main class="portal-main">
+        <h1 class="portal-title">Welcome To Learner Portal</h1>
+
+        <div class="statusbar" aria-label="Learner statistics">
+          <div class="statusbar__header">
+            <div class="statusbar__header-item">Total Tasks</div>
+            <div class="statusbar__header-item">Completed</div>
+            <div class="statusbar__header-item">Outstanding</div>
+            <div class="statusbar__header-item">Overdue</div>
+          </div>
+          <div class="statusbar__body">
+            <div class="statusbar__cards-wrap">
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+              <div class="statusbar__card">0</div>
+            </div>
+          </div>
+        </div>
+
+        <section class="learner-content" aria-label="Learner overview">
+          <div class="upcoming-panel">
+            <h2>Upcoming Tasks</h2>
+            <button type="button" class="open-button">Open</button>
+          </div>
+
+          <div class="averages-panel">
+            <div class="average-item">
+              <div class="ring ring-task">
+                <span>75%</span>
+              </div>
+              <div class="average-label">Task Average</div>
+            </div>
+
+            <div class="average-item">
+              <div class="ring ring-game">
+                <span>75%</span>
+              </div>
+              <div class="average-label">Game Average</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="progress-list" aria-label="Task progress conditions">
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-green" style="width: 75%"></div></div>
+          </div>
+
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-green" style="width: 75%"></div></div>
+          </div>
+
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">75%</span>
+            <div class="track"><div class="fill fill-blue" style="width: 75%"></div></div>
+          </div>
+
+          <div class="progress-row">
+            <span class="row-label">[NAME OF TASK]</span>
+            <span class="row-status">Pending</span>
+            <div class="track"><div class="fill fill-light" style="width: 100%"></div></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="../../scripts/fit.js"></script>
+    <script>
+      (function () {
+        function updateRing(ring, label, percent) {
+          if (!ring || !label) return;
+          const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
+          label.textContent = safePercent + "%";
+          ring.style.background = "conic-gradient(#6f66ff 0 " + safePercent + "%, rgba(255,255,255,0.18) " + safePercent + "% 100%)";
+        }
+
+        const taskCards = Array.from(document.querySelectorAll(".statusbar__card"));
+        const taskRing = document.querySelector(".ring-task");
+        const taskLabel = taskRing ? taskRing.querySelector("span") : null;
+
+        if (taskCards.length >= 2) {
+          const totalTasks = Number(taskCards[0].textContent.trim()) || 0;
+          const completedTasks = Number(taskCards[1].textContent.trim()) || 0;
+          const taskPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 75;
+          updateRing(taskRing, taskLabel, taskPercent);
+        } else {
+          updateRing(taskRing, taskLabel, 75);
+        }
+
+        const gameRing = document.querySelector(".ring-game");
+        const gameLabel = gameRing ? gameRing.querySelector("span") : null;
+        const savedHighScore = Number(localStorage.getItem("skillsTrackMemoryHighScore") || 0);
+        const gamePercent = savedHighScore > 0 ? Math.min(100, Math.round((savedHighScore / 20) * 100)) : 75;
+        updateRing(gameRing, gameLabel, gamePercent);
+      })();
+    </script>
+  </body>
+</html>

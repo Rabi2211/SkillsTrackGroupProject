@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillsTrack — Learner Report</title>
+    <style>
+      :root {
+        --bg-void: #050b1a;
+        --panel: rgba(27, 48, 72, 0.78);
+        --panel-lighter: rgba(76, 118, 163, 0.55);
+        --panel-line: rgba(175, 212, 255, 0.26);
+        --head-bg: rgba(90, 136, 197, 0.9);
+        --label: rgba(225, 233, 248, 0.9);
+        --field-bg: rgba(115, 150, 194, 0.55);
+        --table-line: rgba(187, 214, 247, 0.32);
+        --text: #edf4ff;
+        --muted: rgba(231, 239, 255, 0.7);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        height: 100%;
+        font-family: "Inter", sans-serif;
+        background:
+          radial-gradient(circle at 20% 25%, rgba(126, 74, 178, 0.7), transparent 18%),
+          radial-gradient(circle at 70% 68%, rgba(52, 97, 201, 0.58), transparent 20%),
+          radial-gradient(circle at 16% 72%, rgba(17, 93, 177, 0.34), transparent 18%),
+          linear-gradient(180deg, #050b1a 0%, #0b1a2f 100%);
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .page {
+        position: relative;
+        width: min(100%, 640px);
+        min-height: 600px;
+        padding: 18px 0 10px;
+      }
+
+      .back-btn {
+        position: absolute;
+        left: 8px;
+        top: 14px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 46px;
+        line-height: 1;
+        font-weight: 300;
+        cursor: pointer;
+      }
+
+      .title {
+        margin: 6px 0 14px;
+        text-align: center;
+        color: rgba(247, 248, 255, 0.96);
+        font-size: clamp(20px, 1.8vw, 28px);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .report-panel {
+        width: min(100%, 560px);
+        margin: 0 auto;
+        background: var(--panel);
+        border: 1px solid rgba(164, 189, 219, 0.15);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+        padding: 14px 16px 10px;
+      }
+
+      .section {
+        margin: 0;
+      }
+
+      .section-title {
+        background: rgba(102, 145, 196, 0.42);
+        color: var(--label);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 6px 10px;
+        margin: 0 0 8px;
+        border: 1px solid var(--panel-line);
+      }
+
+      .fields-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        min-height: 28px;
+      }
+
+      .field {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 8px 5px;
+        background: rgba(122, 162, 214, 0.18);
+        border: 1px solid var(--table-line);
+        min-height: 28px;
+      }
+
+      .field label {
+        color: var(--label);
+        font-size: 10px;
+        font-weight: 600;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+      }
+
+      .field input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        font-size: 10px;
+        outline: none;
+        font-family: inherit;
+      }
+
+      .field input::placeholder {
+        color: rgba(231, 239, 255, 0.5);
+      }
+
+      .table-wrap {
+        margin-top: 8px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      thead th {
+        background: rgba(84, 127, 182, 0.85);
+        color: var(--text);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 8px 6px;
+        border: 1px solid var(--table-line);
+      }
+
+      tbody td {
+        background: rgba(112, 147, 199, 0.16);
+        color: var(--text);
+        border: 1px solid var(--table-line);
+        height: 22px;
+        padding: 4px 6px;
+        font-size: 10px;
+      }
+
+      tbody td input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        font-size: 10px;
+        outline: none;
+        font-family: inherit;
+      }
+
+      tfoot td {
+        background: rgba(113, 150, 202, 0.22);
+        color: var(--text);
+        border: 1px solid var(--table-line);
+        padding: 7px 6px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .progress-strip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .summary-boxes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .summary-box {
+        border: 1px solid var(--table-line);
+        background: rgba(94, 130, 181, 0.34);
+        color: var(--text);
+        min-height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .comments {
+        margin-top: 10px;
+      }
+
+      .comments-box {
+        height: 38px;
+        border: 1px solid var(--table-line);
+        background: rgba(115, 150, 194, 0.12);
+      }
+
+      .signature-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 12px;
+        padding-bottom: 6px;
+      }
+
+      .signature {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--label);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .signature .line {
+        flex: 1;
+        border-bottom: 1px solid rgba(196, 218, 250, 0.8);
+        height: 14px;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 14px;
+      }
+
+      .print-btn {
+        min-width: 100px;
+        border: 1px solid rgba(154, 195, 255, 0.8);
+        background: rgba(89, 135, 201, 0.55);
+        color: #f3f7ff;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 9px 16px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 720px) {
+        .field-row,
+        .signature-row {
+          grid-template-columns: 1fr;
+        }
+
+        .report-panel {
+          padding: 12px 10px 8px;
+        }
+
+        .back-btn {
+          top: 6px;
+          font-size: 38px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <button class="back-btn" aria-label="Back">&larr;</button>
+      <h1 class="title">Learner Progress Report</h1>
+
+      <main class="report-panel" aria-label="Learner progress report form">
+        <section class="section" aria-label="Learner information">
+          <div class="section-title">Learner Information</div>
+          <div class="fields-grid">
+            <div class="field-row">
+              <div class="field">
+                <label>Learner Name</label>
+                <input type="text" value="" />
+              </div>
+              <div class="field">
+                <label>Course/Programme</label>
+                <input type="text" value="" />
+              </div>
+              <div class="field">
+                <label>Report Date</label>
+                <input type="text" value="" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" style="margin-top: 10px;" aria-label="Games played and scores">
+          <div class="section-title">Games Played &amp; Scores</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 10%;">#</th>
+                  <th style="width: 30%;">Game Played</th>
+                  <th style="width: 20%;">Date</th>
+                  <th style="width: 20%;">Score</th>
+                  <th style="width: 20%;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4" style="text-align:right;">Average Game Score:</td>
+                  <td>[XX %]</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" style="margin-top: 10px;" aria-label="Task progress">
+          <div class="section-title">Task Progress</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 12%;">#</th>
+                  <th style="width: 32%;">Task</th>
+                  <th style="width: 22%;">Status</th>
+                  <th style="width: 34%;">Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3" style="text-align:right;">Average Task Progress:</td>
+                  <td>[XX %]</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" style="margin-top: 10px;" aria-label="Summary">
+          <div class="section-title">Summary</div>
+          <div class="summary-boxes">
+            <div class="summary-box">Average Game Score: [XX %]</div>
+            <div class="summary-box">Average Task Progress: [XX %]</div>
+          </div>
+        </section>
+
+        <section class="section comments" aria-label="Facilitation comments">
+          <div class="section-title">Facilitation Comments</div>
+          <div class="comments-box"></div>
+        </section>
+
+        <div class="signature-row">
+          <div class="signature">
+            <span>Signed:</span>
+            <span class="line"></span>
+          </div>
+          <div class="signature">
+            <span>Date:</span>
+            <span class="line"></span>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="print-btn" type="button">Print Report</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

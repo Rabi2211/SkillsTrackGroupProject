@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lecturer Portal</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+
+  <body>
+    <main class="desktop-7 lecturer-portal">
+      <header class="header">
+        <a href="lecturerPortal.html" aria-label="Back to lecturer dashboard">
+          <img class="logo" src="../../public/images/logo.png" alt="SkillsTrack logo" />
+        </a>
+
+        <button class="menu-button" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </header>
+
+      <h1 class="portal-title">Welcome To Lecturer Portal</h1>
+
+      <div class="lecturer-layout">
+        <div class="left-column">
+          <section class="actions-card" aria-label="Add task actions">
+            <article class="action">
+              <h2>Add Tasks</h2>
+              <p>Fill form to add tasks</p>
+              <button type="button" aria-label="Add task">+</button>
+            </article>
+
+            <div class="divider" aria-hidden="true"></div>
+
+            <article class="action">
+              <h2>Add Guide</h2>
+              <p>Upload a pdf file of guide</p>
+              <button type="button" aria-label="Upload guide">+</button>
+            </article>
+          </section>
+
+          <section class="report-card" aria-label="Download learner report">
+            <h2>Download learners report</h2>
+            <button type="button" onclick="window.location.href='lecturerReport.html'">Print</button>
+          </section>
+        </div>
+
+        <section class="progress-card" aria-label="Learner progress overview">
+          <h2>Learner's Progress</h2>
+
+          <div class="overall">
+            <div class="progress-ring large-ring" style="background: conic-gradient(#4f46e5 0 72%, #f3f4f6 72% 100%);">
+              <strong>72%</strong>
+            </div>
+            <p>OverAll</p>
+          </div>
+
+          <div class="progress-groups">
+            <div class="progress-item">
+              <div class="progress-ring small-ring" style="background: conic-gradient(#4f46e5 0 84%, #f3f4f6 84% 100%);">
+                <strong>84%</strong>
+              </div>
+              <p>Female Learners</p>
+            </div>
+
+            <div class="progress-item">
+              <div class="progress-ring small-ring" style="background: conic-gradient(#4f46e5 0 91%, #f3f4f6 91% 100%);">
+                <strong>91%</strong>
+              </div>
+              <p>Male Learners</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
