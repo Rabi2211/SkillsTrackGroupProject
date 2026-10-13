@@ -8,19 +8,21 @@
   </head>
   <body>
     <main class="booking-page">
-      <a class="back-link" href="../profile-menu/index.html" aria-label="Back to profile">&lt;</a>
+      <a class="back-link" href="../../src/pages/learner-portal.html" aria-label="Back to learner portal">&lt;</a>
       <section class="booking-panel" aria-labelledby="booking-title">
         <h1 id="booking-title" class="visually-hidden">Book a support session</h1>
         <form id="bookingForm" class="booking-form">
-          <label class="field field-topic" for="learnerName">
-            <span>Name:</span>
-            <input id="learnerName" name="learnerName" type="text" required />
-          </label>
+          <div class="booking-name-row">
+            <label class="field field-name" for="learnerName">
+              <span>Name:</span>
+              <input id="learnerName" name="learnerName" type="text" required />
+            </label>
 
-          <label class="field field-topic" for="learnerSurname">
-            <span>Surname:</span>
-            <input id="learnerSurname" name="learnerSurname" type="text" required />
-          </label>
+            <label class="field field-name" for="learnerSurname">
+              <span>Surname:</span>
+              <input id="learnerSurname" name="learnerSurname" type="text" required />
+            </label>
+          </div>
 
           <label class="field field-topic" for="bookingTopic">
             <span>Topic Of Booking:</span>

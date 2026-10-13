@@ -1,14 +1,7 @@
 
 import '../../firebase.js';
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  serverTimestamp,
-  updateDoc,
-} from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
-import { db } from '../../firebase.js';
+import { get, ref, serverTimestamp, update } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
+import { db, snapshotToList } from '../../firebase.js';
 
 const scheduleRows = document.querySelector('#scheduleRows');
 
@@ -27,10 +20,8 @@ async function loadBookings() {
   if (!scheduleRows) return;
 
   try {
-    const snapshot = await getDocs(collection(db, 'bookings'));
-    const pendingBookings = snapshot.docs
-      .map((bookingDoc) => ({ id: bookingDoc.id, ...bookingDoc.data() }))
-      .filter(isPendingBooking);
+    const snapshot = await get(ref(db, 'bookings'));
+    const pendingBookings = snapshotToList(snapshot).filter(isPendingBooking);
 
     if (!pendingBookings.length) {
       scheduleRows.innerHTML = '<div class="table-row row"><div class="cell">No pending sessions.</div></div>';
@@ -66,9 +57,9 @@ async function loadBookings() {
         const booking = pendingBookings.find((item) => item.id === id);
         if (!booking) return;
 
-        const bookingRef = doc(db, 'bookings', id);
+        const bookingRef = ref(db, `bookings/${id}`);
 
-        await updateDoc(bookingRef, {
+        await update(bookingRef, {
           status: 'scheduled',
           scheduledDate: booking.preferredDate || booking.scheduledDate || '',
           scheduledTime: booking.preferredTime || booking.bookingTime || booking.scheduledTime || 'Not set',

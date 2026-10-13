@@ -1,5 +1,5 @@
 import '../../firebase.js';
-import { addDoc, collection, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
+import { push, ref, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
 import { auth, db } from '../../firebase.js';
 
 const bookingForm = document.querySelector('#bookingForm');
@@ -52,7 +52,7 @@ if (bookingForm && bookingMessage) {
     try {
       const fullName = `${learnerName} ${learnerSurname}`.trim();
 
-      await addDoc(collection(db, 'bookings'), {
+      await push(ref(db, 'bookings'), {
         topic,
         preferredDate,
         preferredTime,

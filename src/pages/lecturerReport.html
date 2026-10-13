@@ -148,8 +148,8 @@
 </div>
 
 <script type="module">
-  import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-  import { auth, db } from "../../firebase.js";
+  import { get, ref } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+  import { auth, db, snapshotToList } from "../../firebase.js";
 
   let rows = [
     {learner:'', completed:'', score:'', notes:''},
@@ -203,9 +203,9 @@
 
     let lecturer = { ...storedUser };
     try {
-      const lecturerDoc = await getDoc(doc(db, 'lecturers', currentUser.uid));
+      const lecturerDoc = await get(ref(db, `lecturers/${currentUser.uid}`));
       if (lecturerDoc.exists()) {
-        lecturer = { ...lecturer, ...lecturerDoc.data() };
+        lecturer = { ...lecturer, ...lecturerDoc.val() };
       }
     } catch (error) {
       console.error('Failed to load lecturer record:', error);
@@ -220,9 +220,8 @@
 
     let lecturerTasks = [];
     try {
-      const taskSnapshot = await getDocs(collection(db, 'tasks'));
-      lecturerTasks = taskSnapshot.docs
-        .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      const taskSnapshot = await get(ref(db, 'tasks'));
+      lecturerTasks = snapshotToList(taskSnapshot)
         .filter((task) => {
           const createdBy = task.createdBy || task.lecturerId || task.lecturerUid || '';
           const assignedBy = Array.isArray(task.assignedBy) ? task.assignedBy : [];
@@ -234,8 +233,8 @@
 
     let learners = [];
     try {
-      const learnersSnapshot = await getDocs(collection(db, 'students'));
-      learners = learnersSnapshot.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+      const learnersSnapshot = await get(ref(db, 'students'));
+      learners = snapshotToList(learnersSnapshot);
     } catch (error) {
       console.error('Failed to load learners:', error);
     }

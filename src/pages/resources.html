@@ -157,6 +157,15 @@
         box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
       }
 
+      .resource-name,
+      .resource-empty-message {
+        margin: 12px 0 0;
+        max-width: 220px;
+        text-align: center;
+        font-size: 0.85rem;
+        word-break: break-word;
+      }
+
       .resource-button {
         margin-top: 16px;
         padding: 8px 16px;
@@ -169,6 +178,11 @@
         text-transform: uppercase;
         border-radius: 3px;
         cursor: pointer;
+      }
+
+      .resource-button:disabled {
+        opacity: 0.6;
+        cursor: wait;
       }
 
       @media (max-width: 760px) {
@@ -198,13 +212,13 @@
         </div>
 
         <nav class="resources-nav" aria-label="Main navigation">
-          <a href="#">Dashboard</a>
-          <a href="#">Tasks</a>
-          <a href="#">Bookings</a>
-          <a href="#" class="active">Resources</a>
+          <a href="learner-portal.html">Dashboard</a>
+          <a href="tasks.html">Tasks</a>
+          <a href="../../Nyiko/book-session/studentBookings.html">Bookings</a>
+          <a href="resources.html" class="active">Resources</a>
         </nav>
 
-        <button type="button" class="resources-profile" aria-label="Profile">
+        <button type="button" class="resources-profile" aria-label="Profile" onclick="window.location.href='../../Nyiko/studentProfile/learnerProfile.html'">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.87 0-7 2.24-7 5v1h14v-1c0-2.76-3.13-5-7-5Z" fill="currentColor"/>
           </svg>
@@ -214,23 +228,9 @@
       <main class="resources-main">
         <h1 class="resources-title">Welcome To RESOURCES:</h1>
 
-        <section class="resources-grid" aria-label="Resource downloads">
-          <div class="resource-item">
-            <div class="resource-card" aria-label="PDF resource">PDF</div>
-            <button type="button" class="resource-button">Download</button>
-          </div>
-
-          <div class="resource-item">
-            <div class="resource-card" aria-label="PDF resource">PDF</div>
-            <button type="button" class="resource-button">Download</button>
-          </div>
-
-          <div class="resource-item">
-            <div class="resource-card" aria-label="PDF resource">PDF</div>
-            <button type="button" class="resource-button">Download</button>
-          </div>
-        </section>
+        <section class="resources-grid" aria-label="Resource downloads" aria-live="polite"></section>
       </main>
     </div>
+    <script type="module" src="resources.js"></script>
   </body>
 </html>

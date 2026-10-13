@@ -40,7 +40,7 @@ textarea {
   background-color: var(--night);
   background-image:
     linear-gradient(rgba(2, 8, 20, 0.14), rgba(2, 8, 20, 0.14)),
-    url('../images/background.png');
+    url('../../images/background.png');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -60,7 +60,7 @@ textarea {
 .booking-panel {
   position: relative;
   width: min(530px, calc(100% - 28px));
-  height: 345px;
+  height: 400px;
   margin: 101px auto 0;
   transform: translateX(35px);
   background: var(--panel);
@@ -91,7 +91,7 @@ textarea {
   display: block;
   width: 100%;
   height: 100%;
-  padding: 12px;
+  padding: 14px 12px 6px;
   border: 0;
   border-radius: 0;
   outline: 0;
@@ -106,13 +106,29 @@ textarea {
   box-shadow: 0 0 0 2px var(--accent);
 }
 
+.booking-name-row {
+  position: absolute;
+  top: 24px;
+  left: 57px;
+  display: flex;
+  width: min(373px, calc(100% - 114px));
+  gap: 20px;
+}
+
+.field-name {
+  position: relative;
+  flex: 1;
+  height: 41px;
+}
+
 .field-topic {
-  top: 72px;
+  top: 83px;
   left: 57px;
   width: min(373px, calc(100% - 114px));
   height: 41px;
 }
 
+.field-name span,
 .field-topic span,
 .field-description span {
   position: absolute;
@@ -167,7 +183,7 @@ textarea {
 }
 
 .field-description {
-  top: 237px;
+  top: 222px;
   left: 57px;
   width: min(329px, calc(100% - 114px));
   height: 81px;
@@ -180,7 +196,7 @@ textarea {
 
 .booking-form button {
   position: absolute;
-  top: 381px;
+  top: 326px;
   left: 39%;
   width: 88px;
   height: 17px;
@@ -204,7 +220,7 @@ textarea {
 
 .booking-message {
   position: absolute;
-  top: 406px;
+  top: 356px;
   left: 0;
   width: 100%;
   min-height: 1rem;
@@ -244,14 +260,12 @@ textarea {
     transform: none;
   }
 
+  .booking-name-row,
+  .booking-datetime-row,
   .field-topic,
   .field-description {
     left: 24px;
     width: calc(100% - 48px);
-  }
-
-  .date-field {
-    right: 24px;
   }
 
   .booking-form button {

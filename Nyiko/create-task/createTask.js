@@ -1,5 +1,5 @@
 import '../../firebase.js';
-import { addDoc, collection, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
+import { push, ref, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
 import { auth, db } from '../../firebase.js';
 
 const taskForm = document.getElementById('taskForm');
@@ -22,13 +22,12 @@ taskForm.addEventListener('submit', async (event) => {
     otherInfo: taskForm.elements.otherInfo.value.trim(),
     status: 'pending',
     createdBy: auth.currentUser?.uid || 'guest-lecturer',
-    assignedTo: [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   };
 
   try {
-    await addDoc(collection(db, 'tasks'), task);
+    await push(ref(db, 'tasks'), task);
     window.alert('Task created successfully!');
     taskForm.reset();
     taskForm.elements.taskTitle.focus();
