@@ -5,10 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SkillsTrack — Landing</title>
     <link rel="stylesheet" href="../landingPage.css">
+    <style>
+      #hero {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 3;
+        pointer-events: none;
+        background: transparent;
+      }
+
+      .ltr {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        text-align: center;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        font-weight: 800;
+        transform-origin: 50% 50%;
+        will-change: transform, opacity;
+        user-select: none;
+        pointer-events: none;
+      }
+
+      .ltr.hero-letter {
+        color: #fff;
+        transition: text-shadow 0.8s ease, color 0.8s ease;
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+      }
+
+      .ltr.hero-letter.done {
+        color: #7cf0ff;
+        text-shadow: 0 0 12px rgba(124, 240, 255, 0.9), 0 0 36px rgba(60, 140, 255, 0.7);
+      }
+    </style>
   </head>
   <body>
     <div class="st-landing">
       <canvas id="bg" class="bg-canvas" aria-hidden="true"></canvas>
+      <div id="hero" aria-hidden="true"></div>
       <div class="st-frame">
         <img src="../../public/images/logo.png" class="st-logo" alt="SkillsTrack logo" width="140" height="140" />
         <h1 class="st-welcome">Welcome To SkillsTrack</h1>
@@ -22,6 +60,192 @@
     </div>
 
     <script type="module" src="../../scripts/landing.js"></script>
-    
+    <script>
+      (() => {
+        const WORD = "SKILLSTRACK";
+        const FILLER_COUNT = 110;
+        const SCATTER_MS = 2800;
+        const GATHER_MS = 1600;
+        const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        const hero = document.getElementById("hero");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const rand = (a, b) => a + Math.random() * (b - a);
+        const clamp01 = (v) => Math.max(0, Math.min(1, v));
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+        let W = 0;
+        let H = 0;
+        let letters = [];
+        let startTime = 0;
+        let gatherStart = null;
+        let running = true;
+
+        function makeLetter(char, isHero, idx) {
+          const size = isHero ? rand(30, 46) : rand(14, 40);
+          const el = document.createElement("span");
+          el.className = "ltr" + (isHero ? " hero-letter" : "");
+          el.textContent = char;
+          el.style.fontSize = `${size}px`;
+          el.style.width = `${size}px`;
+          el.style.height = `${size}px`;
+          el.style.lineHeight = `${size}px`;
+
+          if (!isHero) {
+            el.style.color = `hsl(${rand(190, 230)}, 80%, ${rand(55, 75)}%)`;
+            el.style.opacity = rand(0.35, 0.85).toString();
+          }
+
+          hero.appendChild(el);
+
+          return {
+            el,
+            isHero,
+            idx,
+            size,
+            baseOpacity: isHero ? 1 : parseFloat(el.style.opacity),
+            bx: 0,
+            by: 0,
+            amp: rand(10, 40),
+            sp: rand(0.4, 1.2),
+            ph: rand(0, Math.PI * 2),
+            br: rand(-40, 40),
+            rs: rand(-0.02, 0.02),
+            delay: isHero ? idx * 70 : rand(0, 400),
+            x0: 0,
+            y0: 0,
+            r0: 0,
+            tx: 0,
+            ty: 0,
+            ts: 1
+          };
+        }
+
+        function build() {
+          hero.innerHTML = "";
+          letters = [];
+
+          [...WORD].forEach((c, i) => letters.push(makeLetter(c, true, i)));
+
+          for (let i = 0; i < FILLER_COUNT; i++) {
+            letters.push(makeLetter(ALPHABET[Math.floor(Math.random() * ALPHABET.length)], false, i));
+          }
+
+          place();
+        }
+
+        function place() {
+          W = hero.clientWidth;
+          H = hero.clientHeight;
+          const step = Math.min(W * 0.9 / WORD.length, 90);
+          const totalW = step * WORD.length;
+
+          letters.forEach((l) => {
+            l.bx = rand(0, W);
+            l.by = rand(0, H);
+
+            if (l.isHero) {
+              l.tx = W / 2 - totalW / 2 + step * (l.idx + 0.5);
+              l.ty = H / 2;
+              l.ts = (step * 1.05) / l.size;
+            }
+          });
+        }
+
+        function scatterPos(l, t) {
+          return {
+            x: l.bx + Math.sin(t * 0.001 * l.sp + l.ph) * l.amp,
+            y: l.by + Math.cos(t * 0.001 * l.sp * 0.8 + l.ph) * l.amp,
+            r: l.br + t * l.rs * 10
+          };
+        }
+
+        function draw(l, x, y, r, s, o) {
+          const half = l.size / 2;
+          l.el.style.transform = `translate(${x - half}px, ${y - half}px) rotate(${r}deg) scale(${s})`;
+          l.el.style.opacity = o;
+        }
+
+        function frame(now) {
+          if (!running) return;
+
+          const t = now - startTime;
+
+          if (gatherStart === null && t >= SCATTER_MS) {
+            gatherStart = now;
+            letters.forEach((l) => {
+              const p = scatterPos(l, t);
+              l.x0 = p.x;
+              l.y0 = p.y;
+              l.r0 = ((p.r % 360) + 540) % 360 - 180;
+            });
+          }
+
+          if (gatherStart === null) {
+            letters.forEach((l) => {
+              const p = scatterPos(l, t);
+              draw(l, p.x, p.y, p.r, 1, l.baseOpacity);
+            });
+          } else {
+            let allDone = true;
+
+            letters.forEach((l) => {
+              const raw = (now - gatherStart - l.delay) / GATHER_MS;
+              if (raw < 1) allDone = false;
+
+              const p = ease(clamp01(raw));
+
+              if (l.isHero) {
+                draw(l, lerp(l.x0, l.tx, p), lerp(l.y0, l.ty, p), lerp(l.r0, 0, p), lerp(1, l.ts, p), 1);
+              } else {
+                draw(l, lerp(l.x0, W / 2, p), lerp(l.y0, H / 2, p), lerp(l.r0, l.r0 + 180, p), lerp(1, 0.1, p), l.baseOpacity * (1 - p));
+              }
+            });
+
+            if (allDone) {
+              letters.forEach((l) => {
+                if (l.isHero) l.el.classList.add("done");
+              });
+              running = false;
+              return;
+            }
+          }
+
+          requestAnimationFrame(frame);
+        }
+
+        function start() {
+          running = false;
+          build();
+          gatherStart = null;
+
+          if (reduceMotion) {
+            letters.forEach((l) => {
+              if (l.isHero) {
+                draw(l, l.tx, l.ty, 0, l.ts, 1);
+                l.el.classList.add("done");
+              } else {
+                l.el.style.opacity = "0";
+              }
+            });
+            return;
+          }
+
+          running = true;
+          startTime = performance.now();
+          requestAnimationFrame(frame);
+        }
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(start, 250);
+        });
+
+        start();
+      })();
+    </script>
   </body>
 </html>
