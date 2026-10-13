@@ -7,10 +7,17 @@ const scheduledButton = document.querySelector('.scheduled-sessions-button');
 const scheduledModal = document.querySelector('#scheduledSessionsModal');
 const scheduledList = document.querySelector('#scheduledSessionsList');
 const modalClose = document.querySelector('.scheduled-modal-close');
+const signOutButton = document.querySelector('.menu-card button:last-of-type');
 
 if (closeButton) {
   closeButton.addEventListener('click', () => {
     window.history.back();
+  });
+}
+
+if (signOutButton) {
+  signOutButton.addEventListener('click', () => {
+    window.location.href = '../../src/pages/landing.html';
   });
 }
 

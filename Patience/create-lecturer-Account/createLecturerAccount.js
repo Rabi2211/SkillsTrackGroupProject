@@ -17,6 +17,11 @@ if (!form || !message || !passwordInput || !confirmPasswordInput || !usernameInp
     form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
+        if (location.protocol === "file:") {
+            showError("Please run the app through a local web server such as npm run dev or VS Code Live Server. Firebase account creation does not work when the page is opened directly from the file system.");
+            return;
+        }
+
         const fullName = nameInput.value.trim();
         const email = usernameInput.value.trim();
         const gender = genderInput?.value.trim() || "";

@@ -35,6 +35,7 @@ if (!form || !message || !passwordInput || !confirmPasswordInput) {
         message.style.color = "green";
         message.textContent = "Password reset successfully!";
         form.reset();
+        window.location.href = "../log-in-learner/learnerLogin.html";
     });
 }
 

@@ -19,6 +19,5 @@ verifyBtn.addEventListener("click", () => {
         return;
     }
 
-    message.style.color = "#00ff99";
-    message.textContent = "Verification email sent successfully!";
+    window.location.href = "../forgot-password-learner/forgotPassLearner.html";
 });
