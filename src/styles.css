@@ -30,7 +30,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% - 24px);
+  width: calc(100% - 40px);
   max-width: 1361px;
   height: 58px;
   padding: 0 170px 0 10px;

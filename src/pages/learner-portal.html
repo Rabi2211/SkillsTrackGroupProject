@@ -13,7 +13,7 @@
           <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
         </a>
 
-        <button class="portal-profile" aria-label="Open profile" onclick="window.location.href='../../Nyiko/studentProfile/learnerProfile.html'">
+        <button class="portal-profile" aria-label="Open profile" onclick="window.location.href='learnerProfile.html'">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
             <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z" />
           </svg>
@@ -50,7 +50,6 @@
         <section class="learner-content" aria-label="Learner overview">
           <div class="upcoming-panel">
             <h2>Upcoming Tasks</h2>
-            <div class="upcoming-task-list" id="upcomingTaskList" aria-live="polite"></div>
             <button type="button" class="open-button" onclick="window.location.href='tasks.html'">Open</button>
           </div>
 
@@ -100,216 +99,34 @@
     </div>
 
     <script src="../../scripts/fit.js"></script>
-    <script type="module">
-      import { ref, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
-      import { db, snapshotToList } from "../../firebase.js";
-
-      // Realtime UI: listen for the currently signed-in user's UID via the
-      // `userDataUpdated` event (emitted by `firebase.js`) and attach an
-      // onValue listener to `/tasks` that filters tasks belonging to that
-      // user. Updates statistics and upcoming tasks in realtime.
-
-      function escapeHtml(str) {
-        if (str == null) return '';
-        return String(str)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
-
-      function updateRing(ring, label, percent) {
-        if (!ring || !label) return;
-        const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
-        label.textContent = safePercent + "%";
-        ring.style.background = "conic-gradient(#6f66ff 0 " + safePercent + "%, rgba(255,255,255,0.18) " + safePercent + "% 100%)";
-      }
-
-      const statusCards = Array.from(document.querySelectorAll(".statusbar__card"));
-      const taskRing = document.querySelector(".ring-task");
-      const taskLabel = taskRing ? taskRing.querySelector("span") : null;
-      const gameRing = document.querySelector(".ring-game");
-      const gameLabel = gameRing ? gameRing.querySelector("span") : null;
-      const upcomingTaskList = document.getElementById("upcomingTaskList");
-
-      let currentUid = null;
-      let tasksUnsub = null;
-      let gamesUnsub = null;
-
-      function clearRealtimeListeners() {
-        if (tasksUnsub) {
-          try { tasksUnsub(); } catch (e) { /* ignore */ }
-          tasksUnsub = null;
-        }
-        if (gamesUnsub) {
-          try { gamesUnsub(); } catch (e) { /* ignore */ }
-          gamesUnsub = null;
-        }
-      }
-
-      function clearStats() {
-        // reset cards
-        statusCards.forEach((c) => (c.textContent = "0"));
-        updateRing(taskRing, taskLabel, 0);
-        updateRing(gameRing, gameLabel, 0);
-        if (upcomingTaskList) upcomingTaskList.innerHTML = '<div class="upcoming-task-item">No upcoming tasks</div>';
-      }
-
-      function attachTasksListener(uid) {
-        clearRealtimeListeners();
-
-        if (!uid) {
-          clearStats();
-          return;
+    <script>
+      (function () {
+        function updateRing(ring, label, percent) {
+          if (!ring || !label) return;
+          const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
+          label.textContent = safePercent + "%";
+          ring.style.background = "conic-gradient(#6f66ff 0 " + safePercent + "%, rgba(255,255,255,0.18) " + safePercent + "% 100%)";
         }
 
-        const tasksRef = ref(db, "tasks");
-        tasksUnsub = onValue(tasksRef, (snapshot) => {
-          const list = snapshotToList(snapshot).filter(Boolean);
+        const taskCards = Array.from(document.querySelectorAll(".statusbar__card"));
+        const taskRing = document.querySelector(".ring-task");
+        const taskLabel = taskRing ? taskRing.querySelector("span") : null;
 
-          // A task belongs to the learner if:
-          // - task.createdBy === uid
-          // - OR task.assignedTo includes uid (array) or equals uid (string)
-          const myTasks = list.filter((task) => {
-            if (!task) return false;
-            if (task.createdBy === uid) return true;
-            const assigned = task.assignedTo;
-            if (!assigned) return false;
-            if (Array.isArray(assigned)) return assigned.includes(uid);
-            return String(assigned) === String(uid);
-          });
-
-          // Compute stats
-          const now = new Date();
-          const totalTasks = myTasks.length;
-          const completedTasks = myTasks.filter((t) => (t.status || "Pending").toLowerCase() === "complete").length;
-          const outstandingTasks = myTasks.filter((t) => (t.status || "Pending").toLowerCase() !== "complete").length;
-          const overdueTasks = myTasks.filter((task) => {
-            const status = (task.status || "Pending").toLowerCase();
-            if (!task.dueDate || status === "complete") return false;
-            const dueDate = new Date(task.dueDate);
-            if (Number.isNaN(dueDate.getTime())) return false;
-            return dueDate < now;
-          }).length;
-
-          // Update status cards in the same order as the markup
-          const values = [totalTasks, completedTasks, outstandingTasks, overdueTasks];
-          statusCards.forEach((el, i) => (el.textContent = String(values[i] ?? 0)));
-
-          // Update task ring percentage (completed / total)
+        if (taskCards.length >= 2) {
+          const totalTasks = Number(taskCards[0].textContent.trim()) || 0;
+          const completedTasks = Number(taskCards[1].textContent.trim()) || 0;
           const taskPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 75;
           updateRing(taskRing, taskLabel, taskPercent);
-
-          // Update upcoming tasks (show up to 3 nearest due tasks)
-          if (upcomingTaskList) {
-            const withDue = myTasks
-              .filter((t) => t.title)
-              .sort((a, b) => {
-                const da = a.dueDate ? new Date(a.dueDate).getTime() : Infinity;
-                const db = b.dueDate ? new Date(b.dueDate).getTime() : Infinity;
-                return da - db;
-              })
-              .slice(0, 3);
-
-            if (withDue.length) {
-              upcomingTaskList.innerHTML = withDue
-                .map((task) => `<div class="upcoming-task-item">${task.title || 'Untitled task'}${task.dueDate ? ' — ' + task.dueDate : ''}</div>`)
-                .join('');
-            } else {
-              upcomingTaskList.innerHTML = '<div class="upcoming-task-item">No upcoming tasks</div>';
-            }
-          }
-
-          // Render per-task progress list
-          try {
-            const progressList = document.querySelector('.progress-list');
-            if (progressList) {
-              const rows = myTasks.slice(0, 8).map((task) => {
-                const title = task.title || 'Untitled task';
-                let pct = 0;
-                if (typeof task.progress === 'number') pct = task.progress;
-                else if (typeof task.completionPercent === 'number') pct = task.completionPercent;
-                else if (Array.isArray(task.phases) && task.phases.length) {
-                  const vals = task.phases.map(p => Number(p.completionPercent) || 0);
-                  pct = vals.reduce((s, v) => s + v, 0) / vals.length;
-                } else if ((task.status || '').toLowerCase() === 'complete') pct = 100;
-
-                pct = Math.max(0, Math.min(100, Math.round(pct)));
-
-                let fillClass = 'fill-light';
-                if (pct >= 75) fillClass = 'fill-green';
-                else if (pct >= 50) fillClass = 'fill-blue';
-
-                return `
-                  <div class="progress-row">
-                    <span class="row-label">${escapeHtml(title)}</span>
-                    <span class="row-status">${pct}%</span>
-                    <div class="track"><div class="fill ${fillClass}" style="width: ${pct}%"></div></div>
-                  </div>
-                `;
-              }).join('');
-
-              progressList.innerHTML = rows || '<div class="progress-row"><span class="row-label">No tasks</span><span class="row-status">0%</span><div class="track"><div class="fill fill-light" style="width: 0%"></div></div></div>';
-            }
-          } catch (e) {
-            console.error('Failed to render progress list:', e);
-          }
-        }, (err) => {
-          console.error('Failed to read tasks realtime:', err);
-          clearStats();
-        });
-
-        // Attach realtime listener for game results for this learner
-        const gamesRef = ref(db, "gameResults");
-        gamesUnsub = onValue(gamesRef, (snap) => {
-          const allGames = snapshotToList(snap).filter(Boolean);
-          const myGames = allGames.filter((g) => {
-            if (!g) return false;
-            return g.learnerId === uid || g.uid === uid || g.userId === uid;
-          });
-
-          if (!myGames.length) {
-            updateRing(gameRing, gameLabel, 0);
-            return;
-          }
-
-          const sum = myGames.reduce((s, g) => s + (Number(g.score) || 0), 0);
-          const avgScore = sum / myGames.length;
-          const percent = Math.min(100, Math.round((avgScore / 20) * 100));
-          updateRing(gameRing, gameLabel, percent);
-        }, (err) => {
-          console.error('Failed to read game results realtime:', err);
-          updateRing(gameRing, gameLabel, 0);
-        });
-      }
-
-      // Listen for firebase.js auth-derived events that include the UID.
-      window.addEventListener('userDataUpdated', (e) => {
-        const uid = e?.detail?.uid || null;
-        currentUid = uid;
-        attachTasksListener(uid);
-      });
-
-      window.addEventListener('userLoggedOut', () => {
-        currentUid = null;
-        clearRealtimeListeners();
-        attachTasksListener(null);
-      });
-
-      window.addEventListener('pagehide', () => {
-        currentUid = null;
-        clearRealtimeListeners();
-      });
-
-      window.addEventListener('pageshow', () => {
-        if (currentUid) {
-          attachTasksListener(currentUid);
+        } else {
+          updateRing(taskRing, taskLabel, 75);
         }
-      });
 
-      // Initialize UI to safe defaults while waiting for auth event.
-      clearStats();
+        const gameRing = document.querySelector(".ring-game");
+        const gameLabel = gameRing ? gameRing.querySelector("span") : null;
+        const savedHighScore = Number(localStorage.getItem("skillsTrackMemoryHighScore") || 0);
+        const gamePercent = savedHighScore > 0 ? Math.min(100, Math.round((savedHighScore / 20) * 100)) : 75;
+        updateRing(gameRing, gameLabel, gamePercent);
+      })();
     </script>
   </body>
 </html>
