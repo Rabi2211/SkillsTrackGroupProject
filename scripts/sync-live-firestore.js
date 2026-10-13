@@ -29,14 +29,23 @@ function toTimestamp(dateString) {
 }
 
 const canonicalCollections = {
-  users: {
-    user_001: {
+  students: {
+    student_001: {
       uid: 'u_learner_1',
       displayName: 'Reabetswe Mashigo',
       email: 'jane@example.com',
-      role: 'learner',
+      role: 'student',
       programme: 'Web Development',
       gameHighScore: 12,
+      createdAt: toTimestamp('2026-10-08T00:00:00.000Z'),
+    },
+  },
+  lecturers: {
+    lecturer_001: {
+      uid: 'u_lecturer_1',
+      displayName: 'Lecturer One',
+      email: 'lecturer@example.com',
+      role: 'lecturer',
       createdAt: toTimestamp('2026-10-08T00:00:00.000Z'),
     },
   },
@@ -68,29 +77,6 @@ const canonicalCollections = {
       createdAt: toTimestamp('2026-10-08T00:00:00.000Z'),
     },
   },
-  reports: {
-    reports_001: {
-      reportId: 'report_1',
-      reportType: 'lecturer',
-      ownerId: 'u_lecturer_1',
-      date: toTimestamp('2026-10-08T00:00:00.000Z'),
-      classSummary: {
-        totalLearners: 20,
-        avgCompletion: 72,
-        avgScore: 68,
-      },
-      breakdown: [
-        {
-          learnerId: 'u_learner_1',
-          learnerName: 'Reabetswe Mashigo',
-          completed: '✓',
-          score: 78,
-          notes: 'Strong improvement',
-        },
-      ],
-      createdAt: toTimestamp('2026-10-08T00:00:00.000Z'),
-    },
-  },
   bookings: {
     bookings_001: {
       bookingId: 'booking_1',
@@ -102,33 +88,6 @@ const canonicalCollections = {
       status: 'requested',
       notes: 'Needs help with HTML frames',
       createdAt: toTimestamp('2026-10-08T00:00:00.000Z'),
-    },
-  },
-  progressSnapshots: {
-    user_u_learner_1: {
-      snapshotId: 'user_u_learner_1',
-      totalTasks: 2,
-      completed: 1,
-      outstanding: 1,
-      overdue: 0,
-      taskAveragePercent: 50,
-      gameAveragePercent: 60,
-      capturedAt: toTimestamp('2026-10-08T00:00:00.000Z'),
-    },
-  },
-  games: {
-    game_1: {
-      learnerId: 'u_learner_1',
-      score: 12,
-      playedAt: toTimestamp('2026-10-08T00:00:00.000Z'),
-    },
-  },
-  phases: {
-    phase_1: {
-      learnerId: 'u_learner_1',
-      phaseName: 'Frame Design',
-      completionPercent: 75,
-      updatedAt: toTimestamp('2026-10-08T00:00:00.000Z'),
     },
   },
 };

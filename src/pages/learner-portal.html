@@ -13,7 +13,7 @@
           <img src="../../public/images/logo.png" alt="SkillsTrack logo" />
         </a>
 
-        <button class="portal-profile" aria-label="Open profile">
+        <button class="portal-profile" aria-label="Open profile" onclick="window.location.href='../../Nyiko/studentProfile/learnerProfile.html'">
           <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
             <path d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v1h20v-1c0-3.33-6.67-5-10-5z" />
           </svg>
@@ -23,7 +23,7 @@
       <nav class="portal-nav" aria-label="Main navigation">
         <a href="learner-portal.html">Dashboard</a>
         <a href="tasks.html">Tasks</a>
-        <a href="#">Bookings</a>
+        <a href="../../Nyiko/book-session/studentBookings.html">Bookings</a>
         <a href="resources.html">Resources</a>
       </nav>
 
@@ -50,7 +50,8 @@
         <section class="learner-content" aria-label="Learner overview">
           <div class="upcoming-panel">
             <h2>Upcoming Tasks</h2>
-            <button type="button" class="open-button">Open</button>
+            <div class="upcoming-task-list" id="upcomingTaskList" aria-live="polite"></div>
+            <button type="button" class="open-button" onclick="window.location.href='tasks.html'">Open</button>
           </div>
 
           <div class="averages-panel">
@@ -99,8 +100,11 @@
     </div>
 
     <script src="../../scripts/fit.js"></script>
-    <script>
-      (function () {
+    <script type="module">
+      import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+      import { db } from "../../firebase.js";
+
+      (async function () {
         function updateRing(ring, label, percent) {
           if (!ring || !label) return;
           const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
@@ -126,6 +130,29 @@
         const savedHighScore = Number(localStorage.getItem("skillsTrackMemoryHighScore") || 0);
         const gamePercent = savedHighScore > 0 ? Math.min(100, Math.round((savedHighScore / 20) * 100)) : 75;
         updateRing(gameRing, gameLabel, gamePercent);
+
+        const upcomingTaskList = document.getElementById("upcomingTaskList");
+        if (upcomingTaskList) {
+          try {
+            const snapshot = await getDocs(collection(db, "tasks"));
+            const tasks = snapshot.docs
+              .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+              .filter((task) => task.title)
+              .slice(-3)
+              .reverse();
+
+            if (tasks.length > 0) {
+              upcomingTaskList.innerHTML = tasks
+                .map((task) => '<div class="upcoming-task-item">' + (task.title || 'Untitled task') + '</div>')
+                .join('');
+            } else {
+              upcomingTaskList.innerHTML = '<div class="upcoming-task-item">No upcoming tasks</div>';
+            }
+          } catch (error) {
+            console.error("Failed to load tasks:", error);
+            upcomingTaskList.innerHTML = '<div class="upcoming-task-item">No upcoming tasks</div>';
+          }
+        }
       })();
     </script>
   </body>

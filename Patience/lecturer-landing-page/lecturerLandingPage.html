@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecturer Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Italianno&family=Segoe+Print&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="lecturerLandingPage.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="portal-panel" aria-label="Lecturer portal welcome">
+        <h1>Welcome To Lecturer Portal</h1>
+
+        <div class="intro">
+          <p>Are you NEW to the administration <button class="emphasis signup" type="button" onclick="window.location.href='../create-lecturer-Account/createLecturerAccount.html'">SIGNUP HERE</button></p>
+          <p>if not then please <button class="emphasis login" type="button" onclick="window.location.href='../log-In-Lecturer/lecturerLogin.html'">LOGIN</button></p>
+        </div>
+
+        <div class="brand-mark" aria-label="portal logo">
+          <img src="../images/logo.png" alt="Portal logo" />
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../../firebase.js"></script>
+  </body>
+</html>

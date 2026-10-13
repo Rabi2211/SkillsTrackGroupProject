@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Administration Account</title>
+    <link rel="stylesheet" href="createLecturerAccount.css">
+</head>
+<body>
+
+    <div class="container">
+        <button type="button" class="close-btn">&times;</button>
+
+        <h1>Create Administration Account</h1>
+
+        <form id="accountForm" class="form-card">
+            <div class="input-group">
+                <label for="name">Name & Surname</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Username (email address)</label>
+                <input type="email" id="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="gender">Gender</label>
+                <select id="gender" required>
+                    <option value="">Select gender</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Other">Other</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="password">
+                    Password
+                    <small>(Must contain one special character)</small>
+                </label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirmPassword">Retype Password</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+
+            <button type="submit" class="create-btn">
+                Create Account
+            </button>
+
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <script type="module" src="createLecturerAccount.js"></script>
+</body>
+</html>

@@ -1,3 +1,5 @@
+import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { auth, db } from "../firebase.js";
 
 /* =================================
    SKILLSTRACK MEMORY GAME
@@ -31,8 +33,6 @@ var buttons = document.querySelectorAll(".memory-button");
 
 var startButton = document.getElementById("start-button");
 
-var restartButton = document.getElementById("restart-button");
-
 var levelDisplay = document.getElementById("level");
 
 var scoreDisplay = document.getElementById("score");
@@ -45,6 +45,35 @@ var gameOverDisplay = document.getElementById("game-over");
 
 var finalScoreDisplay = document.getElementById("final-score");
 
+function getCurrentLearner() {
+    try {
+        return JSON.parse(localStorage.getItem("skillsTrackCurrentUser") || "{}");
+    } catch (error) {
+        return {};
+    }
+}
+
+async function saveGameResult() {
+    const learner = getCurrentLearner();
+    const learnerUid = auth.currentUser?.uid || learner.uid || "guest";
+    const learnerEmail = auth.currentUser?.email || learner.email || "";
+    const learnerName = learner.fullName || `${learner.firstName || ""} ${learner.lastName || ""}`.trim() || "Learner";
+
+    try {
+        await addDoc(collection(db, "gameResults"), {
+            learnerUid,
+            learnerEmail,
+            learnerName,
+            score,
+            level,
+            bestScore: highScore,
+            completedAt: serverTimestamp(),
+            source: "memory-game"
+        });
+    } catch (error) {
+        console.error("Failed to save game result:", error);
+    }
+}
 
 /* =================================
    DISPLAY INITIAL HIGH SCORE
@@ -58,11 +87,6 @@ highScoreDisplay.textContent = highScore;
    ================================= */
 
 startButton.addEventListener("click", function () {
-    startGame();
-});
-
-
-restartButton.addEventListener("click", function () {
     startGame();
 });
 
@@ -284,7 +308,13 @@ function checkPlayerMove() {
    END GAME
    ================================= */
 
-function endGame() {
+async function endGame() {
+
+    if (window.__skillsTrackGameSaved) {
+        return;
+    }
+
+    window.__skillsTrackGameSaved = true;
 
     isPlaying = false;
 
@@ -301,7 +331,6 @@ function endGame() {
 
     startButton.classList.add("hidden");
 
-
     /* -----------------------------
        SAVE HIGH SCORE
        ----------------------------- */
@@ -317,6 +346,12 @@ function endGame() {
 
         highScoreDisplay.textContent = highScore;
     }
+
+    await saveGameResult();
+
+    setTimeout(function () {
+        window.location.href = "../src/pages/tasks.html";
+    }, 1500);
 
 }
 

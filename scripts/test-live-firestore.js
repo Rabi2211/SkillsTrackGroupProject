@@ -4,14 +4,11 @@ import { initializeApp } from 'firebase/app';
 import { collection, getDocs, getFirestore, limit, query } from 'firebase/firestore';
 
 const collectionNames = [
-  'users',
+  'students',
+  'lecturers',
   'tasks',
   'resources',
-  'reports',
   'bookings',
-  'progressSnapshots',
-  'games',
-  'phases',
 ];
 
 function loadDotEnv(baseDir) {

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Session</title>
+    <link rel="stylesheet" href="studentBookings.css" />
+  </head>
+  <body>
+    <main class="booking-page">
+      <a class="back-link" href="../profile-menu/index.html" aria-label="Back to profile">&lt;</a>
+      <section class="booking-panel" aria-labelledby="booking-title">
+        <h1 id="booking-title" class="visually-hidden">Book a support session</h1>
+        <form id="bookingForm" class="booking-form">
+          <label class="field field-topic" for="learnerName">
+            <span>Name:</span>
+            <input id="learnerName" name="learnerName" type="text" required />
+          </label>
+
+          <label class="field field-topic" for="learnerSurname">
+            <span>Surname:</span>
+            <input id="learnerSurname" name="learnerSurname" type="text" required />
+          </label>
+
+          <label class="field field-topic" for="bookingTopic">
+            <span>Topic Of Booking:</span>
+            <input id="bookingTopic" name="topic" type="text" required />
+          </label>
+
+          <div class="booking-datetime-row">
+            <label class="date-field" for="bookingDate">
+              <span>Due Date:</span>
+              <input id="bookingDate" name="preferredDate" type="date" required />
+            </label>
+
+            <label class="date-field" for="bookingTime">
+              <span>Preferred Time:</span>
+              <input id="bookingTime" name="preferredTime" type="time" required />
+            </label>
+          </div>
+
+          <label class="field field-description" for="bookingDescription">
+            <span>Topic Description:</span>
+            <textarea id="bookingDescription" name="description" rows="5" required></textarea>
+          </label>
+
+          <button type="submit">BOOK SESSION</button>
+          <p id="bookingMessage" class="booking-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="studentBook.js"></script>
+  </body>
+</html>
