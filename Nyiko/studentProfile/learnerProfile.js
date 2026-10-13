@@ -62,10 +62,9 @@ async function loadScheduledSessions() {
 }
 
 if (scheduledButton) {
-  scheduledButton.addEventListener('click', async () => {
-    if (!scheduledModal) return;
-    await loadScheduledSessions();
-    scheduledModal.hidden = false;
+  scheduledButton.addEventListener('click', () => {
+    // Navigate to the dedicated scheduled sessions page
+    window.location.href = 'scheduledSessions.html';
   });
 }
 
@@ -76,4 +75,37 @@ if (modalClose) {
     }
   });
 }
+
+// Display identity information for the currently signed-in user.
+const identityName = document.querySelector('.identity p:first-child');
+const identityEmail = document.querySelector('.identity p:last-child');
+
+function setIdentity(name, email) {
+  if (identityName) identityName.textContent = name || '[Name and Surname]';
+  if (identityEmail) identityEmail.textContent = email || '[Username(email)]';
+}
+
+function populateFromDetail(detail) {
+  const data = detail?.data || detail || {};
+  // Prefer explicit registration fields for name and surname
+  const first = data.learnerName || data.firstName || (data.fullName ? String(data.fullName).split(' ')[0] : '') || '';
+  const last = data.learnerSurname || data.lastName || (data.fullName ? String(data.fullName).split(' ').slice(1).join(' ') : '') || '';
+  const fullName = `${first} ${last}`.trim();
+  // Username used at registration: prefer `username` then `email`
+  const username = data.username || data.email || data.userEmail || '';
+  setIdentity(fullName || getStoredUser().fullName || '', username || getStoredUser().email || '');
+}
+
+// Listen for the auth-driven event emitted by firebase.js
+window.addEventListener('userDataUpdated', (e) => {
+  populateFromDetail(e.detail || {});
+});
+
+window.addEventListener('userLoggedOut', () => {
+  setIdentity('[Name and Surname]', '[Username(email)]');
+});
+
+// Initial render: try stored user as a fallback while auth state settles.
+const stored = getStoredUser();
+setIdentity(stored.fullName || stored.learnerName || '', stored.email || '');
 

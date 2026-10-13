@@ -37,6 +37,9 @@
             <button type="button" onclick="window.location.href='../../Nyiko/search-learner/searchLearner.html';" style="display: flex; align-items: center; justify-content: center; width: 100%; border: none; background: transparent; color: #1f2937; font-size: 16px; padding: 10px 12px; border-radius: 8px; cursor: pointer; margin-top: 4px;">
               Search Learner
             </button>
+            <button type="button" onclick="window.location.href='../../Nyiko/schedule-support/scheduleSupport.html';" style="display: flex; align-items: center; justify-content: center; width: 100%; border: none; background: transparent; color: #1f2937; font-size: 16px; padding: 10px 12px; border-radius: 8px; cursor: pointer; margin-top: 4px;">
+              Schedule Session
+            </button>
           </div>
         </div>
       </header>
@@ -95,5 +98,124 @@
         </section>
       </div>
     </main>
+
+    <script type="module">
+      import { ref, onValue } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+      import { db, snapshotToList } from "../../firebase.js";
+
+      function updateRing(ring, label, percent) {
+        if (!ring) return;
+        const safePercent = Math.max(0, Math.min(100, Number(percent) || 0));
+
+        if (label) label.textContent = `${safePercent}%`;
+        ring.style.background = `conic-gradient(#4f46e5 0 ${safePercent}%, #f3f4f6 ${safePercent}% 100%)`;
+      }
+
+      function average(values) {
+        if (!values.length) return 0;
+        return values.reduce((sum, value) => sum + value, 0) / values.length;
+      }
+
+      function normalizeLearnerIds(task) {
+        const values = [];
+        const raw = task?.assignedTo;
+
+        if (Array.isArray(raw)) {
+          raw.forEach((id) => id && values.push(String(id)));
+        } else if (raw) {
+          values.push(String(raw));
+        }
+
+        if (task?.userId) values.push(String(task.userId));
+        if (task?.learnerId) values.push(String(task.learnerId));
+
+        return [...new Set(values.filter(Boolean))];
+      }
+
+      function getStatusValue(task) {
+        return String(task?.status || '').trim().toLowerCase();
+      }
+
+      function getStudentGender(student) {
+        const gender = String(student?.gender || '').trim().toLowerCase();
+        if (gender.includes('female')) return 'female';
+        if (gender.includes('male')) return 'male';
+        return '';
+      }
+
+      function computeProgressForLearner(learnerId, tasks) {
+        const learnerTasks = tasks.filter((task) => normalizeLearnerIds(task).includes(String(learnerId)));
+        if (!learnerTasks.length) return 0;
+
+        const completed = learnerTasks.filter((task) => {
+          const status = getStatusValue(task);
+          return status === 'complete' || status === 'completed';
+        }).length;
+
+        return (completed / learnerTasks.length) * 100;
+      }
+
+      let tasksSnapshot = null;
+      let studentsSnapshot = null;
+
+      function renderProgressSummary() {
+        if (!tasksSnapshot || !studentsSnapshot) return;
+
+        const taskList = snapshotToList(tasksSnapshot);
+        const studentList = snapshotToList(studentsSnapshot);
+
+        const learnerIds = [...new Set(taskList.flatMap((task) => normalizeLearnerIds(task)))];
+        const learnerProgress = learnerIds.map((learnerId) => computeProgressForLearner(learnerId, taskList));
+
+        const overallPercent = average(learnerProgress);
+
+        const femaleIds = studentList
+          .filter((student) => getStudentGender(student) === 'female')
+          .map((student) => String(student.uid || student.id || student.userId || ''))
+          .filter(Boolean);
+
+        const maleIds = studentList
+          .filter((student) => getStudentGender(student) === 'male')
+          .map((student) => String(student.uid || student.id || student.userId || ''))
+          .filter(Boolean);
+
+        const femaleProgress = average(femaleIds.map((learnerId) => computeProgressForLearner(learnerId, taskList)));
+        const maleProgress = average(maleIds.map((learnerId) => computeProgressForLearner(learnerId, taskList)));
+
+        const overallRing = document.querySelector('.large-ring');
+        const overallLabel = overallRing ? overallRing.querySelector('strong') : null;
+        updateRing(overallRing, overallLabel, overallPercent);
+
+        const femaleRing = document.querySelectorAll('.small-ring')[0];
+        const femaleLabel = femaleRing ? femaleRing.querySelector('strong') : null;
+        updateRing(femaleRing, femaleLabel, femaleProgress);
+
+        const maleRing = document.querySelectorAll('.small-ring')[1];
+        const maleLabel = maleRing ? maleRing.querySelector('strong') : null;
+        updateRing(maleRing, maleLabel, maleProgress);
+      }
+
+      const tasksRef = ref(db, 'tasks');
+      const studentsRef = ref(db, 'students');
+
+      const tasksUnsub = onValue(tasksRef, (snapshot) => {
+        tasksSnapshot = snapshot;
+        renderProgressSummary();
+      }, (error) => {
+        console.error('Failed to read tasks for lecturer progress:', error);
+      });
+
+      const studentsUnsub = onValue(studentsRef, (snapshot) => {
+        studentsSnapshot = snapshot;
+        renderProgressSummary();
+      }, (error) => {
+        console.error('Failed to read students for lecturer progress:', error);
+      });
+
+      window.addEventListener('beforeunload', () => {
+        try { tasksUnsub(); } catch (_) {}
+        try { studentsUnsub(); } catch (_) {}
+      });
+    </script>
   </body>
 </html>
