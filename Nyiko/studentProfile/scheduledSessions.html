@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scheduled Sessions</title>
+    <link rel="stylesheet" href="scheduledSessions.css" />
+  </head>
+  <body>
+    <main class="scheduled-shell">
+      <header class="scheduled-header">
+        <button class="back-button" type="button" aria-label="Back">← Back</button>
+        <h1>Scheduled Sessions</h1>
+      </header>
+
+      <section class="scheduled-list" id="scheduledSessionsList" aria-live="polite">
+        <p class="empty">Loading scheduled sessions…</p>
+      </section>
+    </main>
+
+    <script type="module" src="scheduledSessions.js"></script>
+  </body>
+</html>
