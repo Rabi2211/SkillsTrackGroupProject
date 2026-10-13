@@ -101,8 +101,8 @@
 
     <script src="../../scripts/fit.js"></script>
     <script type="module">
-      import { collection, getDocs } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-      import { db } from "../../firebase.js";
+      import { get, ref } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+      import { db, snapshotToList } from "../../firebase.js";
 
       (async function () {
         function updateRing(ring, label, percent) {
@@ -134,9 +134,8 @@
         const upcomingTaskList = document.getElementById("upcomingTaskList");
         if (upcomingTaskList) {
           try {
-            const snapshot = await getDocs(collection(db, "tasks"));
-            const tasks = snapshot.docs
-              .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+            const snapshot = await get(ref(db, "tasks"));
+            const tasks = snapshotToList(snapshot)
               .filter((task) => task.title)
               .slice(-3)
               .reverse();

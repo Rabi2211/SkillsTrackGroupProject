@@ -403,8 +403,8 @@
     </div>
 
     <script type="module">
-      import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-      import { auth, db } from "../../firebase.js";
+      import { get, ref } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+      import { auth, db, snapshotToList } from "../../firebase.js";
 
       const learnerNameField = document.getElementById("learnerNameField");
       const programmeField = document.getElementById("programmeField");
@@ -450,8 +450,8 @@
           return;
         }
 
-        const learnerDoc = await getDoc(doc(db, "students", user.uid));
-        const learner = learnerDoc.exists() ? learnerDoc.data() : {};
+        const learnerDoc = await get(ref(db, `students/${user.uid}`));
+        const learner = learnerDoc.exists() ? learnerDoc.val() : {};
         const fullName = learner.fullName || `${learner.firstName || ""} ${learner.lastName || ""}`.trim() || storedUser.fullName || user.email || "Learner";
         const programme = learner.programme || "N/A";
 
@@ -459,26 +459,20 @@
         programmeField.value = programme;
         reportDateField.value = new Date().toISOString().slice(0, 10);
 
-        const gameResults = [];
-        const gameSnapshot = await getDocs(query(collection(db, "gameResults"), where("learnerUid", "==", user.uid)));
-        gameSnapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          gameResults.push({
+        const gameSnapshot = await get(ref(db, "gameResults"));
+        const gameResults = snapshotToList(gameSnapshot)
+          .filter((data) => data.learnerUid === user.uid)
+          .map((data) => ({
             score: Number(data.score) || 0,
             completedAt: data.completedAt || data.createdAt || null,
             level: Number(data.level) || 0,
-          });
-        });
+          }));
 
-        gameResults.sort((a, b) => {
-          const aTime = a.completedAt?.seconds ? a.completedAt.seconds * 1000 : new Date(a.completedAt || 0).getTime();
-          const bTime = b.completedAt?.seconds ? b.completedAt.seconds * 1000 : new Date(b.completedAt || 0).getTime();
-          return aTime - bTime;
-        });
+        gameResults.sort((a, b) => new Date(a.completedAt || 0).getTime() - new Date(b.completedAt || 0).getTime());
 
         const gameRows = gameResults.length
           ? gameResults.map((result, index) => {
-              const dateText = formatDate(result.completedAt?.toDate ? result.completedAt.toDate() : result.completedAt);
+              const dateText = formatDate(result.completedAt);
               return buildTableRow([String(index + 1), "Memory Challenge", dateText || "N/A", `${result.score}`, result.level > 0 ? "Completed" : "Pending"]);
             })
           : [buildTableRow(["1", "Memory Challenge", "N/A", "0", "Not played"])];
@@ -490,9 +484,8 @@
           : 0;
         gameAverageCell.textContent = `${averageGameScore} %`;
 
-        const taskSnapshot = await getDocs(collection(db, "tasks"));
-        const learnerTasks = taskSnapshot.docs
-          .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+        const taskSnapshot = await get(ref(db, "tasks"));
+        const learnerTasks = snapshotToList(taskSnapshot)
           .filter((task) => {
             const assignedTo = Array.isArray(task.assignedTo) ? task.assignedTo : [];
             const taskLearnerId = task.learnerUid || task.studentId || task.userId || "";

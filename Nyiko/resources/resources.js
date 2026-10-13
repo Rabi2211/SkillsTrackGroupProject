@@ -1,30 +1,46 @@
-import { ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-storage.js';
-import { addDoc, collection, serverTimestamp } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
-import { storage, db, auth } from '../../firebase.js';
+import { getPdfProblem, getUploadErrorMessage, uploadPdf } from '../../src/pages/resourceUpload.js';
+
+const LOGIN_PAGE = '../../Patience/log-In-Lecturer/lecturerLogin.html';
 
 const uploadButton = document.querySelector('.upload-button');
-const uploadIconButton = document.querySelector('.upload-icon');
+const uploadBox = document.querySelector('.upload-box');
 const fileNameLabel = document.getElementById('selected-file-name');
-const confirmationMessage = document.createElement('p');
+const statusMessage = document.createElement('p');
 
-confirmationMessage.textContent = '';
-confirmationMessage.style.marginTop = '12px';
-confirmationMessage.style.color = '#1ecf6a';
-confirmationMessage.style.fontWeight = '600';
-confirmationMessage.style.display = 'none';
+statusMessage.setAttribute('role', 'status');
+statusMessage.style.margin = '12px 0 0';
+statusMessage.style.maxWidth = '420px';
+statusMessage.style.fontWeight = '600';
+statusMessage.style.textAlign = 'center';
+statusMessage.style.display = 'none';
 
-document.body.appendChild(confirmationMessage);
+if (uploadButton) {
+  uploadButton.insertAdjacentElement('afterend', statusMessage);
+}
 
 const fileInput = document.createElement('input');
 fileInput.type = 'file';
-fileInput.accept = '.pdf';
+fileInput.accept = '.pdf,application/pdf';
 fileInput.style.display = 'none';
 document.body.appendChild(fileInput);
 
 let selectedFile = null;
+let isUploading = false;
+// Set when UPLOAD is pressed before a file is chosen, so the upload
+// starts as soon as the file has been picked.
+let uploadAfterSelection = false;
+
+const showStatus = (text, type = 'info') => {
+  const colors = { info: '#f5efe7', success: '#1ecf6a', error: '#ffb4a8' };
+  statusMessage.textContent = text;
+  statusMessage.style.color = colors[type];
+  statusMessage.style.display = text ? 'block' : 'none';
+};
 
 const openFilePicker = () => {
-  fileInput.click();
+  if (!isUploading) {
+    fileInput.click();
+  }
 };
 
 const updateSelectedFileLabel = (file) => {
@@ -33,69 +49,105 @@ const updateSelectedFileLabel = (file) => {
   }
 };
 
-if (uploadButton) {
-  uploadButton.addEventListener('click', async () => {
-    if (!selectedFile) {
-      alert('Please select a PDF file before uploading.');
-      return;
-    }
+// Returns true when the file can be uploaded, otherwise explains why not.
+const selectFile = (file) => {
+  selectedFile = null;
 
-    if (!auth.currentUser) {
-      alert('Please sign in before uploading a PDF.');
-      return;
-    }
-
-    try {
-      const safeBaseName = (selectedFile.name || 'resource')
-        .replace(/\.pdf$/i, '')
-        .trim()
-        .replace(/[^a-zA-Z0-9\-_ ]/g, ' ')
-        .replace(/\s+/g, '_') || 'resource';
-
-      const storageRef = ref(storage, `resources/${Date.now()}_${safeBaseName}.pdf`);
-      await uploadBytes(storageRef, selectedFile);
-      const downloadUrl = await getDownloadURL(storageRef);
-
-      await addDoc(collection(db, 'resources'), {
-        name: selectedFile.name,
-        fileName: selectedFile.name,
-        url: downloadUrl,
-        uploadedBy: auth.currentUser.uid,
-        uploadedAt: serverTimestamp(),
-      });
-
-      confirmationMessage.textContent = 'PDF saved in the Firestore resources collection successfully.';
-      confirmationMessage.style.display = 'block';
-      selectedFile = null;
-      fileInput.value = '';
-      updateSelectedFileLabel(null);
-    } catch (error) {
-      console.error('Upload failed:', error);
-      alert('Failed to upload PDF. Please try again.');
-    }
-  });
-}
-
-if (uploadIconButton) {
-  uploadIconButton.addEventListener('click', openFilePicker);
-}
-
-fileInput.addEventListener('change', () => {
-  const file = fileInput.files && fileInput.files[0];
   if (!file) {
-    selectedFile = null;
     updateSelectedFileLabel(null);
-    return;
+    return false;
   }
 
-  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    alert('Please select a PDF file.');
-    fileInput.value = '';
-    selectedFile = null;
+  const problem = getPdfProblem(file);
+  if (problem) {
     updateSelectedFileLabel(null);
-    return;
+    showStatus(problem, 'error');
+    return false;
   }
 
   selectedFile = file;
   updateSelectedFileLabel(file);
+  showStatus('Ready to upload. Click UPLOAD.');
+  return true;
+};
+
+const uploadSelectedFile = async () => {
+  if (isUploading || !selectedFile) return;
+
+  const file = selectedFile;
+  isUploading = true;
+  uploadButton.disabled = true;
+  showStatus('Uploading, please wait...');
+
+  try {
+    await uploadPdf(file);
+
+    selectedFile = null;
+    fileInput.value = '';
+    updateSelectedFileLabel(null);
+    showStatus(`"${file.name}" uploaded successfully. Learners can now download it from their Resources page.`, 'success');
+  } catch (error) {
+    console.error('Upload failed:', error);
+    showStatus(getUploadErrorMessage(error), 'error');
+
+    if (error.code === 'not-signed-in') {
+      setTimeout(() => {
+        window.location.href = LOGIN_PAGE;
+      }, 1800);
+    }
+  } finally {
+    isUploading = false;
+    uploadButton.disabled = false;
+  }
+};
+
+if (uploadButton) {
+  uploadButton.addEventListener('click', () => {
+    if (!selectedFile) {
+      // No file yet: let the lecturer pick one, then upload it straight away.
+      uploadAfterSelection = true;
+      openFilePicker();
+      return;
+    }
+
+    uploadSelectedFile();
+  });
+}
+
+if (uploadBox) {
+  uploadBox.style.cursor = 'pointer';
+  uploadBox.addEventListener('click', () => {
+    uploadAfterSelection = false;
+    openFilePicker();
+  });
+
+  // A PDF can also be dragged onto the box.
+  uploadBox.addEventListener('dragover', (event) => {
+    event.preventDefault();
+  });
+  uploadBox.addEventListener('drop', (event) => {
+    event.preventDefault();
+    if (isUploading) return;
+    uploadAfterSelection = false;
+    selectFile(event.dataTransfer?.files?.[0]);
+  });
+}
+
+fileInput.addEventListener('cancel', () => {
+  uploadAfterSelection = false;
+});
+
+fileInput.addEventListener('change', () => {
+  const shouldUpload = uploadAfterSelection;
+  uploadAfterSelection = false;
+
+  const isValid = selectFile(fileInput.files && fileInput.files[0]);
+  if (!isValid) {
+    fileInput.value = '';
+    return;
+  }
+
+  if (shouldUpload) {
+    uploadSelectedFile();
+  }
 });

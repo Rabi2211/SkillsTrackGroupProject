@@ -1,4 +1,4 @@
-import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { push, ref, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 import { auth, db } from "../firebase.js";
 
 /* =================================
@@ -60,7 +60,7 @@ async function saveGameResult() {
     const learnerName = learner.fullName || `${learner.firstName || ""} ${learner.lastName || ""}`.trim() || "Learner";
 
     try {
-        await addDoc(collection(db, "gameResults"), {
+        await push(ref(db, "gameResults"), {
             learnerUid,
             learnerEmail,
             learnerName,

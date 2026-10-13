@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+import { ref, set } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
 import { auth, db } from "../../firebase.js";
 
 const form = document.getElementById("accountForm");
@@ -68,15 +68,22 @@ if (!form || !message || !passwordInput || !confirmPasswordInput || !usernameInp
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            await setDoc(doc(db, "lecturers", user.uid), {
-                uid: user.uid,
-                email: user.email,
-                name: fullName,
-                username: email,
-                gender,
-                role: "lecturer",
-                createdAt: new Date().toISOString(),
-            });
+            // The account now exists. If the profile cannot be saved, still let the
+            // lecturer continue instead of reporting that account creation failed.
+            try {
+                await set(ref(db, `lecturers/${user.uid}`), {
+                    uid: user.uid,
+                    email: user.email,
+                    name: fullName,
+                    fullName,
+                    username: email,
+                    gender,
+                    role: "lecturer",
+                    createdAt: new Date().toISOString(),
+                });
+            } catch (profileError) {
+                console.error("Account created, but the lecturer profile could not be saved to the database:", profileError);
+            }
 
             showSuccess("Account created successfully!");
             form.reset();
@@ -85,10 +92,14 @@ if (!form || !message || !passwordInput || !confirmPasswordInput || !usernameInp
             }, 600);
         } catch (error) {
             const errorMessage = error.code === "auth/email-already-in-use"
-                ? "This email is already registered."
+                ? "This email is already registered. Please log in instead."
                 : error.code === "auth/weak-password"
                     ? "Password is too weak. Please use a stronger password."
-                    : "Account creation failed. Please try again.";
+                    : error.code === "auth/invalid-email"
+                        ? "Please enter a valid email address."
+                        : error.code === "auth/network-request-failed"
+                            ? "Account creation failed. Please check your internet connection."
+                            : `Account creation failed (${error.code || "unknown error"}). Please try again.`;
 
             showError(errorMessage);
         }

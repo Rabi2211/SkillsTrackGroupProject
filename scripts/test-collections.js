@@ -252,7 +252,7 @@ function runTests() {
   validatePhases();
   validatePageQueries();
 
-  console.log('✅ Firestore collection structure passed all validation checks.');
+  console.log('✅ Collection structure passed all validation checks.');
   console.log(`Validated collections: ${Object.keys(sampleData).join(', ')}`);
 }
 

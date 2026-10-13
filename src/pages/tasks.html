@@ -348,10 +348,10 @@
         </div>
 
         <nav class="tasks-nav" aria-label="Main navigation">
-          <a href="#">Dashboard</a>
-          <a href="#" class="active">Tasks</a>
-          <a href="#">Bookings</a>
-          <a href="#">Resources</a>
+          <a href="learner-portal.html">Dashboard</a>
+          <a href="tasks.html" class="active">Tasks</a>
+          <a href="../../Nyiko/book-session/studentBookings.html">Bookings</a>
+          <a href="resources.html">Resources</a>
         </nav>
 
         <button type="button" class="tasks-profile" aria-label="Profile" onclick="window.location.href='../../Nyiko/studentProfile/learnerProfile.html'">
@@ -438,8 +438,8 @@
       </main>
     </div>
     <script type="module">
-      import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-      import { db } from "../../firebase.js";
+      import { get, ref, update } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js";
+      import { db, snapshotToList } from "../../firebase.js";
 
       const tableBody = document.querySelector("tbody");
       const statValues = document.querySelectorAll(".tasks-stat-value");
@@ -484,7 +484,7 @@
           button.dataset.completed = "true";
           button.textContent = "Completed";
 
-          await updateDoc(doc(db, "tasks", taskId), {
+          await update(ref(db, `tasks/${taskId}`), {
             status: "complete"
           });
 
@@ -501,10 +501,8 @@
         if (!tableBody) return;
 
         try {
-          const snapshot = await getDocs(collection(db, "tasks"));
-          const tasks = snapshot.docs
-            .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-            .filter((task) => task.title);
+          const snapshot = await get(ref(db, "tasks"));
+          const tasks = snapshotToList(snapshot).filter((task) => task.title);
 
           updateTaskStats(tasks);
 
@@ -518,7 +516,7 @@
 
             return `
               <tr>
-                <td>${task.id.slice(0, 6)}</td>
+                <td>${task.id.slice(-6)}</td>
                 <td>${task.title || "Untitled task"}</td>
                 <td>${task.dueDate || "Not set"}</td>
                 <td>${task.priority || "Normal"}</td>

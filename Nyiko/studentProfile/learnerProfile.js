@@ -1,6 +1,6 @@
 import '../../firebase.js';
-import { collection, getDocs, query, where } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js';
-import { db } from '../../firebase.js';
+import { get, ref } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
+import { db, snapshotToList } from '../../firebase.js';
 
 const closeButton = document.querySelector('.close-button');
 const scheduledButton = document.querySelector('.scheduled-sessions-button');
@@ -36,11 +36,10 @@ async function loadScheduledSessions() {
   const learnerEmail = storedUser.email || '';
   const learnerFullName = storedUser.fullName || '';
 
-  const q = query(collection(db, 'bookings'), where('status', '==', 'scheduled'));
-  const snapshot = await getDocs(q);
+  const snapshot = await get(ref(db, 'bookings'));
 
-  const matchingSessions = snapshot.docs
-    .map((docSnap) => docSnap.data())
+  const matchingSessions = snapshotToList(snapshot)
+    .filter((booking) => booking.status === 'scheduled')
     .filter((booking) => {
       if (learnerEmail && booking.learnerEmail === learnerEmail) return true;
       const bookingFullName = `${booking.learnerName || ''} ${booking.learnerSurname || ''}`.trim();

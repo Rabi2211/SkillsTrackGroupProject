@@ -9,8 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:collections": "node scripts/test-collections.js",
-    "test:live-collections": "node scripts/test-live-firestore.js",
-    "sync:live-firestore": "node scripts/sync-live-firestore.js"
+    "test": "node --test \"src/pages/*.test.js\"",
+    "test:live-database": "node scripts/test-live-database.js",
+    "sync:live-database": "node scripts/sync-live-database.js"
   },
   "dependencies": {
     "firebase": "^13.0.0",
