@@ -157,6 +157,31 @@
         box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
       }
 
+      .resources-upload {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto 28px;
+        width: min(780px, calc(100% - 70px));
+      }
+
+      .resources-upload-button {
+        margin-top: 0;
+        padding: 12px 22px;
+        font-size: 0.8rem;
+      }
+
+      .resources-upload-status {
+        min-height: 1.2em;
+        margin: 12px 0 0;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .resources-upload-status[data-type="success"] { color: #58e08f; }
+      .resources-upload-status[data-type="error"] { color: #ffb4a8; }
+
       .resource-name,
       .resource-empty-message {
         margin: 12px 0 0;
@@ -227,6 +252,12 @@
 
       <main class="resources-main">
         <h1 class="resources-title">Welcome To RESOURCES:</h1>
+
+        <section class="resources-upload" aria-label="Upload a PDF">
+          <input type="file" id="resourceFileInput" accept=".pdf,application/pdf" hidden />
+          <button type="button" class="resource-button resources-upload-button" id="resourceUploadButton">Upload PDF</button>
+          <p class="resources-upload-status" id="resourceUploadStatus" role="status"></p>
+        </section>
 
         <section class="resources-grid" aria-label="Resource downloads" aria-live="polite"></section>
       </main>

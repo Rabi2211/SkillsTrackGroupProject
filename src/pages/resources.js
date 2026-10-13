@@ -1,7 +1,13 @@
 import { get, ref } from 'https://www.gstatic.com/firebasejs/13.0.0/firebase-database.js';
 import { db, snapshotToList } from '../../firebase.js';
+import { getPdfProblem, getUploadErrorMessage, uploadPdf } from './resourceUpload.js';
+
+const LOGIN_PAGE = '../../Patience/log-in-learner/learnerLogin.html';
 
 const grid = document.querySelector('.resources-grid');
+const uploadButton = document.getElementById('resourceUploadButton');
+const uploadInput = document.getElementById('resourceFileInput');
+const uploadStatus = document.getElementById('resourceUploadStatus');
 
 function setEmptyState(message = 'No PDFs uploaded yet.') {
   if (!grid) return;
@@ -91,6 +97,53 @@ async function loadResources() {
     console.error('Unable to load resource downloads:', error);
     setEmptyState('Unable to load resources. Please sign in and try again.');
   }
+}
+
+function showUploadStatus(text, type = 'info') {
+  if (!uploadStatus) return;
+  uploadStatus.textContent = text;
+  uploadStatus.dataset.type = type;
+}
+
+async function handleUpload(file) {
+  const problem = getPdfProblem(file);
+  if (problem) {
+    showUploadStatus(problem, 'error');
+    return;
+  }
+
+  uploadButton.disabled = true;
+  showUploadStatus(`Uploading "${file.name}", please wait...`);
+
+  try {
+    await uploadPdf(file);
+    showUploadStatus(`"${file.name}" uploaded successfully.`, 'success');
+    await loadResources();
+  } catch (error) {
+    console.error('Upload failed:', error);
+    showUploadStatus(getUploadErrorMessage(error), 'error');
+
+    if (error.code === 'not-signed-in') {
+      setTimeout(() => {
+        window.location.href = LOGIN_PAGE;
+      }, 1800);
+    }
+  } finally {
+    uploadButton.disabled = false;
+  }
+}
+
+if (uploadButton && uploadInput) {
+  // One click: choose the PDF and it uploads straight away.
+  uploadButton.addEventListener('click', () => uploadInput.click());
+
+  uploadInput.addEventListener('change', () => {
+    const file = uploadInput.files && uploadInput.files[0];
+    uploadInput.value = '';
+    if (file) {
+      handleUpload(file);
+    }
+  });
 }
 
 loadResources();
