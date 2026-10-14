@@ -24,7 +24,8 @@ if (signOutButton) {
   signOutButton.addEventListener('click', async () => {
     try {
       await signOut(auth);
-      window.location.href = '../../src/pages/landing.html';
+      localStorage.removeItem('skillsTrackCurrentUser');
+      window.location.href = '../../src/pages/index.html';
     } catch (error) {
       console.error('Sign out failed:', error);
     }

@@ -5,7 +5,7 @@
 }
 
 body {
-    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url("../background.png") no-repeat center center/cover;
+    background: #414456;
     font-family: "Times New Roman", serif;
     min-height: 100vh;
     display: flex;

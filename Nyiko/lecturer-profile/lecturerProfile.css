@@ -20,7 +20,7 @@ body {
 
 body {
   min-height: 100vh;
-  background: #f3f3f3;
+  background: var(--page-bg);
   color: var(--text);
   font-family: 'Bodoni MT', Didot, 'Times New Roman', serif;
 }
