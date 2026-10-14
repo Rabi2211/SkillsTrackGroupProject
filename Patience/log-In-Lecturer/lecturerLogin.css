@@ -11,7 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    background: rgba(5, 11, 36, 0.75);
+    background: #02080f;
 }
 
 .close-btn {
