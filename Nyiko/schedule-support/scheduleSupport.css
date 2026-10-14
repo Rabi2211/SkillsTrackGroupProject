@@ -22,8 +22,8 @@ body {
 }
 
 body {
-  min-height: 50px;
-  background: url("../../images/background.png") center / cover no-repeat fixed;
+  min-height: 100vh;
+  background: rgba(5, 11, 36, 0.87);
   color: var(--text);
 }
 
@@ -42,9 +42,10 @@ button {
 .support-panel {
   position: relative;
   width: min(100%, 1000px);
-  min-height: 100vh;
+  min-height: 80vh;
   background: rgba(35, 53, 76, 0.9);
   padding: 38px 36px 20px 36px;
+  margin-top: 60px;
 }
 
 .back-button {
