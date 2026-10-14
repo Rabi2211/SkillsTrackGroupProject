@@ -118,13 +118,19 @@ h1 {
   align-items: center;
   justify-content: center;
   background: transparent;
+  border: none;
   box-shadow: none;
+  padding: 0;
   overflow: hidden;
 }
 
 .brand-mark img {
   width: 50%;
   height: 50%;
+  display: block;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 @media (max-width: 768px) {
